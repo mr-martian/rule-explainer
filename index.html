@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Apertium Rule-Explainer</title>
+    <script src="wasm/tree-sitter.js"></script>
+    <script src="jquery.js"></script>
+    <script src="rule-explainer.js"></script>
+    <style>
+      .highlighted {
+          border: 2px solid blue;
+      }
+      .tree-node {
+          margin-left: 5px;
+          border: 1px dashed grey;
+      }
+      #code {
+          width: 50%;
+      }
+      #tree {
+          width: 50%;
+      }
+      #display {
+          width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <select id="parser">
+      <option value="CG">Constraint Grammar</option>
+      <option value="LEXC">HFST LexC</option>
+      <option value="LEXD">Lexd</option>
+      <option value="RTX">apertium-recursive RTX</option>
+      <option value="TWOLC">HFST TwoLC</option>
+      <option value="XFST">HFST XFST</option>
+    </select>
+    <textarea id="input"></textarea>
+    <table id="display">
+      <tbody>
+        <tr><td id="code"></td><td id="tree"></td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>
