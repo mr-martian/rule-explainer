@@ -8,6 +8,15 @@ var langs = {
   XFST: null,
 };
 
+var rules = {
+  CG: null,
+  LEXC: null,
+  LEXD: null,
+  RTX: null,
+  TWOLC: null,
+  XFST: null,
+};
+
 var Parser = null;
 
 TSParser.init().then(async function () {
@@ -20,6 +29,8 @@ TSParser.init().then(async function () {
   langs.XFST = await tpl.load('wasm/tree-sitter-xfst.wasm');
   Parser = new TSParser();
   console.log("Languages loaded");
+  rules.RTX = load_patterns(langs.RTX, RTX_RULES);
+  console.log("Rules loaded");
 });
 
 function make_spans(lines, tree) {
@@ -117,12 +128,18 @@ function make_tree(node) {
 
 function update_output() {
   if (Parser == null) return;
-  Parser.setLanguage(langs[$('#parser').val()]);
+  let lang = $('#parser').val();
+  console.log(lang);
+  Parser.setLanguage(langs[lang]);
   let text = $('#input').val();
   let lines = text.split('\n');
   let tree = Parser.parse(text);
   $('#code').html(make_spans(lines, tree));
-  $('#tree').html(make_tree(tree.rootNode));
+  if (lang == 'RTX') {
+    $('#tree').html(translate(rules.RTX, tree, true));
+  } else {
+    $('#tree').html(make_tree(tree.rootNode));
+  }
   $('.tree-node').mouseover(function(e) {
     let i = e.target.getAttribute('data-id');
     $('.highlighted').removeClass('highlighted');

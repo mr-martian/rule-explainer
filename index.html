@@ -3,7 +3,9 @@
     <title>Apertium Rule-Explainer</title>
     <script src="wasm/tree-sitter.js"></script>
     <script src="jquery.js"></script>
+    <script src="js-code2text/code2text.js"></script>
     <script src="rule-explainer.js"></script>
+    <script src="rules/rtx.js"></script>
     <style>
       .highlighted {
           border: 2px solid blue;
@@ -25,12 +27,12 @@
   </head>
   <body>
     <select id="parser">
-      <option value="CG">Constraint Grammar</option>
-      <option value="LEXC">HFST LexC</option>
-      <option value="LEXD">Lexd</option>
+      <!--<option value="CG">Constraint Grammar</option>-->
+      <!--<option value="LEXC">HFST LexC</option>-->
+      <!--<option value="LEXD">Lexd</option>-->
       <option value="RTX">apertium-recursive RTX</option>
-      <option value="TWOLC">HFST TwoLC</option>
-      <option value="XFST">HFST XFST</option>
+      <!--<option value="TWOLC">HFST TwoLC</option>-->
+      <!--<option value="XFST">HFST XFST</option>-->
     </select>
     <textarea id="input"></textarea>
     <table id="display">

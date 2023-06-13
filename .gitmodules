@@ -1,0 +1,3 @@
+[submodule "js-code2text"]
+	path = js-code2text
+	url = https://github.com/mr-martian/js-code2text.git
