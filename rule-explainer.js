@@ -171,7 +171,6 @@ function update_output() {
   $('.code-line,.code-seg').mouseover(function(e) {
     let sp = e.target.getAttribute('data-spans');
     if (sp === null) return;
-    console.log(sp);
     $('.highlighted').removeClass('highlighted');
     sp.split(' ').forEach(i => {console.log(i); $('*[data-id="'+i+'"]').addClass('highlighted')});
   });
