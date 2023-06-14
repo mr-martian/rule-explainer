@@ -18,7 +18,7 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "\n(attr_rule\n  name: (ident) @name_text\n  (attr_default src: (ident) @src_text trg: (_) @trg_text)\n  [(ident) (string) (attr_set_insert)]* @tag_list\n) @root",
+    "pattern": "\n(attr_rule\n  name: (ident) @name_text\n  (attr_default src: (ident) @src_text trg: (_) @trg_text)\n  [(ident) (string) (attr_set_insert)] @tag_list\n) @root",
     "output": [
       {
         "lists": {
@@ -31,7 +31,7 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "\n(attr_rule\n  name: (ident) @name_text\n  [(ident) (string) (attr_set_insert)]* @tag_list\n) @root",
+    "pattern": "\n(attr_rule\n  name: (ident) @name_text\n  [(ident) (string) (attr_set_insert)] @tag_list\n) @root",
     "output": [
       {
         "lists": {
@@ -42,6 +42,10 @@ RTX_RULES = [
         "output": "Define the list {name_text} as consisting of {tag_list}."
       }
     ]
+  },
+  {
+    "pattern": "(attr_rule \"@\" . (ident) @root_text)",
+    "output": "{root_text} (which cannot be overwritten when copying tags from a chunk)"
   },
   {
     "pattern": "(attr_set_insert (ident) @set_text) @root",
@@ -65,10 +69,6 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "(output_rule \".\" @root)",
-    "output": ", "
-  },
-  {
     "pattern": "(output_rule (ident) @root (#match? @root \"^_$\"))",
     "output": "the part of speech tag"
   },
@@ -79,6 +79,61 @@ RTX_RULES = [
   {
     "pattern": "(output_rule (ident) @root_text)",
     "output": "the {root_text} tag"
+  },
+  {
+    "pattern": "\n(output_rule\n  pos: (ident) @pos_text\n  (lu_cond . (_ (always_tok) value: (_) @val) .)\n) @root",
+    "output": "When outputting {pos_text}, put {val}."
+  },
+  {
+    "pattern": "\n(output_rule pos: (ident) @pos_text (lu_cond \"(\" (_) @op_list \")\")) @root\n        ",
+    "output": [
+      {
+        "lists": {
+          "op_list": {
+            "join": "\n",
+            "html_type": "ol"
+          }
+        },
+        "output": "When outputting {pos_text}, use the first applicable rule from:\n{op_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(lu_cond (_ cond: (_) @cond value: (_) @val) @root)",
+    "output": "If {cond}, put {val}."
+  },
+  {
+    "pattern": "(lu_cond (_ (else_tok) value: (_) @val) @root)",
+    "output": "Otherwise, put {val}."
+  },
+  {
+    "pattern": "(condition . \"(\" (_) @thing_list \")\" .) @root",
+    "output": [
+      {
+        "lists": {
+          "thing_list": {
+            "join": " "
+          }
+        },
+        "output": "{thing_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(and) @root",
+    "output": "and"
+  },
+  {
+    "pattern": "(or) @root",
+    "output": "or"
+  },
+  {
+    "pattern": "(not) @root",
+    "output": "not"
+  },
+  {
+    "pattern": "(str_op) @root_text",
+    "output": "{root_text}"
   },
   {
     "pattern": "(attr_rule (ident) @root_text)",
@@ -104,10 +159,25 @@ RTX_RULES = [
       {
         "lists": {
           "pattern_list": {
-            "join": ", "
+            "join": ", ",
+            "html_type": "ol"
           }
         },
         "output": "When parsing, match {pattern_list}, and when outputting, put {output}."
+      }
+    ]
+  },
+  {
+    "pattern": "(reduce_output . \"{\" (_) @thing_list \"}\" .) @root",
+    "output": [
+      {
+        "lists": {
+          "thing_list": {
+            "join": ", ",
+            "html_type": "ol"
+          }
+        },
+        "output": "{thing_list}"
       }
     ]
   },
@@ -130,8 +200,15 @@ RTX_RULES = [
           }
         },
         "output": "a word with part-of-speech {pos_text}, from which copy the tags {tag_list}"
+      },
+      {
+        "output": "a word with part-of-speech {pos_text}"
       }
     ]
+  },
+  {
+    "pattern": "(pattern_element (ident) @root_text)",
+    "output": "{root_text}"
   },
   {
     "pattern": "(attr_pair src: (_) @src trg: (_) @trg) @root",
@@ -155,6 +232,1083 @@ RTX_RULES = [
           }
         },
         "output": "To change {src_text} to {trg_text}, change: {pair_list}."
+      }
+    ]
+  },
+  {
+    "pattern": "(blank) @root",
+    "output": "a space"
+  },
+  {
+    "pattern": "\n(output_element\n  (conjoin)? @conjoin\n  (insert)? @insert\n  (inserted)? @inserted\n  (magic)? @magic\n  (num) @pos_text\n  (macro_name (ident) @macro_text)?\n  (output_var_set)? @vars\n) @root",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "the word in position {pos_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "insert"
+          }
+        ],
+        "output": "the word in position {pos_text}, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "the word in position {pos_text}, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "vars"
+          }
+        ],
+        "output": "the word in position {pos_text}, with the following tags being overridden: {vars}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "the word in position {pos_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          }
+        ],
+        "output": "the word in position {pos_text}, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "the word in position {pos_text}, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, with all tag slots which correspond to something on the chunk being filled in by copying",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "the word in position {pos_text}, with all tag slots which correspond to something on the chunk being filled in by copying",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "macro_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "macro_text"
+          }
+        ],
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "the word in position {pos_text}",
+        "lists": {}
+      }
+    ]
+  },
+  {
+    "pattern": "(set_var name: (ident) @name_text value: (_) @val) @root",
+    "output": "set the tag {name_text} to {val}"
+  },
+  {
+    "pattern": "(output_var_set (set_var) @set_list) @root",
+    "output": [
+      {
+        "lists": {
+          "set_list": {
+            "join": ", "
+          }
+        },
+        "output": "{set_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(clip val: (ident) @tag_text) @root",
+    "output": "{tag_text}"
+  },
+  {
+    "pattern": "\n(clip\n  (inserted)? @inserted\n  pos: (num) @pos_text\n  attr: (ident) @attr_text\n  (clip_side)? @side\n  convert: (ident)? @conv_text\n) @root\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "conv_text"
+          },
+          {
+            "has": "inserted"
+          },
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, using the conversion rules to change it to a {conv_text} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conv_text"
+          },
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, using the conversion rules to change it to a {conv_text} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conv_text"
+          },
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr_text} tag of word {pos_text}, using the conversion rules to change it to a {conv_text} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conv_text"
+          }
+        ],
+        "output": "the {attr_text} tag of word {pos_text}, using the conversion rules to change it to a {conv_text} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "inserted"
+          },
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr_text} tag of word {pos_text}",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "the {attr_text} tag of word {pos_text}",
+        "lists": {}
       }
     ]
   }

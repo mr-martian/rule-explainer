@@ -6,6 +6,7 @@
     <script src="js-code2text/code2text.js"></script>
     <script src="rule-explainer.js"></script>
     <script src="rules/rtx.js"></script>
+    <script src="highlight/rtx.js"></script>
     <style>
       .highlighted {
           border: 2px solid blue;
@@ -22,6 +23,27 @@
       }
       #display {
           width: 100%;
+      }
+      .variable {
+          color: purple;
+      }
+      .constant-numeric {
+          color: blue;
+      }
+      .punctuation-delimiter {
+          color: grey;
+      }
+      .constant-string {
+          color: brown;
+      }
+      .keyword-control {
+          color: darkblue;
+      }
+      .keyword-operator {
+          color: gold;
+      }
+      .comment {
+          color: grey;
       }
     </style>
   </head>

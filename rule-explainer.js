@@ -33,7 +33,7 @@ TSParser.init().then(async function () {
   console.log("Rules loaded");
 });
 
-function make_spans(lines, tree) {
+function make_spans(lines, tree, highlights) {
   let blob = [];
   for (let i = 0; i < lines.length; i++) {
     blob.push({whole: []});
@@ -75,10 +75,19 @@ function make_spans(lines, tree) {
       }
     }
     node.children.forEach(get_ranges);
-  }
+  };
+  let hl_cls = function(ls) {
+    let ret = [];
+    for (let id of ls) {
+      if (highlights.hasOwnProperty(id)) {
+        ret.push(highlights[id]);
+      }
+    }
+    return ret.join(' ');
+  };
   get_ranges(tree.rootNode);
   return lines.map(function(line, lineno) {
-    let ret = '<p class="code-line" data-spans="' + blob[lineno].whole.join(' ') + '">';
+    let ret = '<p class="code-line '+hl_cls(blob[lineno].whole)+'" data-spans="' + blob[lineno].whole.join(' ') + '">';
     let spans = [];
     for (let k in blob[lineno]) {
       if (blob[lineno].hasOwnProperty(k) && k != 'whole') {
@@ -116,7 +125,7 @@ function make_spans(lines, tree) {
       new_segs = new_segs.concat(segs.slice(j+1));
       segs = new_segs;
     }
-    ret += segs.map((s) => '<span class="code-seg" data-spans="'+s[2].join(' ')+'">'+s[1]+'</span>').join('');
+    ret += segs.map((s) => '<span class="code-seg '+hl_cls(s[2])+'" data-spans="'+s[2].join(' ')+'">'+s[1]+'</span>').join('');
     ret += '</p>';
     return ret;
   }).join('');
@@ -124,6 +133,19 @@ function make_spans(lines, tree) {
 
 function make_tree(node) {
   return '<div class="tree-node" data-id="'+node.id+'">'+node.type+node.children.map(make_tree).join('')+'</div>';
+}
+
+function get_highlights(tree, lang) {
+  let caps = [];
+  if (lang == 'RTX') {
+    caps = langs.RTX.query(rtx_highlight).captures(tree.rootNode);
+  }
+  let ret = {};
+  for (let obj of caps) {
+    console.log(obj);
+    ret[obj.node.id] = obj.name.replace('.', '-');
+  }
+  return ret;
 }
 
 function update_output() {
@@ -134,7 +156,9 @@ function update_output() {
   let text = $('#input').val();
   let lines = text.split('\n');
   let tree = Parser.parse(text);
-  $('#code').html(make_spans(lines, tree));
+  let highlights = get_highlights(tree, lang);
+  console.log('highlight', highlights);
+  $('#code').html(make_spans(lines, tree, highlights));
   if (lang == 'RTX') {
     $('#tree').html(translate(rules.RTX, tree, true));
   } else {
