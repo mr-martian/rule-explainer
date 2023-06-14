@@ -143,7 +143,6 @@ function get_highlights(tree, lang) {
   }
   let ret = {};
   for (let obj of caps) {
-    console.log(obj);
     ret[obj.node.id] = obj.name.replace('.', '-');
   }
   return ret;
@@ -158,7 +157,6 @@ function update_output() {
   let lines = text.split('\n');
   let tree = Parser.parse(text);
   let highlights = get_highlights(tree, lang);
-  console.log('highlight', highlights);
   $('#code').html(make_spans(lines, tree, highlights));
   if (lang == 'RTX') {
     $('#tree').html(translate(rules.RTX, tree, true));
@@ -169,6 +167,13 @@ function update_output() {
     let i = e.target.getAttribute('data-id');
     $('.highlighted').removeClass('highlighted');
     $('*[data-spans~="'+i+'"]').addClass('highlighted');
+  });
+  $('.code-line,.code-seg').mouseover(function(e) {
+    let sp = e.target.getAttribute('data-spans');
+    if (sp === null) return;
+    console.log(sp);
+    $('.highlighted').removeClass('highlighted');
+    sp.split(' ').forEach(i => {console.log(i); $('*[data-id="'+i+'"]').addClass('highlighted')});
   });
 }
 
