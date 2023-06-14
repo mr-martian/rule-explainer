@@ -39,6 +39,7 @@ function make_spans(lines, tree, highlights) {
     blob.push({whole: []});
   }
   let add_whole = function(lineno, id) {
+    if (id == tree.rootNode.id) return;
     blob[lineno].whole.push(id);
   };
   let add_span = function(lineno, s, e, id) {
@@ -87,7 +88,7 @@ function make_spans(lines, tree, highlights) {
   };
   get_ranges(tree.rootNode);
   return lines.map(function(line, lineno) {
-    let ret = '<p class="code-line '+hl_cls(blob[lineno].whole)+'" data-spans="' + blob[lineno].whole.join(' ') + '">';
+    let ret = '<p class="code-line '+hl_cls(blob[lineno].whole)+'" data-spans="' + blob[lineno].whole.join(' ') + '"><span class="lineno">'+lineno+'</span> ';
     let spans = [];
     for (let k in blob[lineno]) {
       if (blob[lineno].hasOwnProperty(k) && k != 'whole') {
