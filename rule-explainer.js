@@ -178,12 +178,14 @@ function update_output() {
     let i = e.target.getAttribute('data-id');
     $('.highlighted').removeClass('highlighted');
     $('*[data-spans~="'+i+'"]').addClass('highlighted');
+    $('.highlighted')[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
   });
   $('.code-line,.code-seg').mouseover(function(e) {
     let sp = e.target.getAttribute('data-spans');
     if (sp === null) return;
     $('.highlighted').removeClass('highlighted');
     sp.split(' ').forEach(i => $('*[data-id="'+i+'"]').addClass('highlighted'));
+    $('.highlighted')[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
   });
 }
 

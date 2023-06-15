@@ -26,6 +26,12 @@
       }
       td {
           width: 50%;
+          vertical-align: top;
+          overflow-y: auto;
+      }
+      /* TODO: don't hardcode this, calculate off of window height */
+      #code, #tree {
+          height: 500px;
       }
       #tree p {
           margin-bottom: 0px;
@@ -86,7 +92,7 @@
       <tbody>
         <tr>
           <td><div id="code" contenteditable>! type code here</div></td>
-          <td id="tree"></td>
+          <td><div id="tree"></div></td>
         </tr>
       </tbody>
     </table>
