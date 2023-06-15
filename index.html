@@ -7,6 +7,7 @@
     <script src="rule-explainer.js"></script>
     <script src="rules/rtx.js"></script>
     <script src="highlight/rtx.js"></script>
+    <script src="tags.js"></script>
     <style>
       .highlighted {
           background: yellow;
@@ -75,6 +76,12 @@
       }
       .code-line:nth-child(odd) {
           background: #EEEEEE;
+      }
+      span.tree-node[data-note]::after {
+          content: attr(data-note);
+          font-size: x-small;
+          font-style: italic;
+          margin-left: 2px;
       }
     </style>
   </head>

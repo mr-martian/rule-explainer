@@ -18,7 +18,7 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "\n(attr_rule\n  name: (ident) @name_text\n  (attr_default src: (ident) @src_text trg: (_) @trg_text)\n  [(ident) (string) (attr_set_insert)] @tag_list\n) @root",
+    "pattern": "\n(attr_rule\n  name: (ident) @name\n  (attr_default src: (ident) @src trg: (_) @trg_text)\n  [(ident) (string) (attr_set_insert)] @tag_list\n) @root",
     "output": [
       {
         "lists": {
@@ -26,12 +26,12 @@ RTX_RULES = [
             "join": ", "
           }
         },
-        "output": "Define the tag category {name_text} as consisting of {tag_list}, and if this category is not present, then insert {src_text} while parsing and replace it with {trg_text} when outputting."
+        "output": "Define the tag category {name} as consisting of {tag_list}, and if this category is not present, then insert {src} while parsing and replace it with {trg_text} when outputting."
       }
     ]
   },
   {
-    "pattern": "\n(attr_rule\n  name: (ident) @name_text\n  [(ident) (string) (attr_set_insert)] @tag_list\n) @root",
+    "pattern": "\n(attr_rule\n  name: (ident) @name\n  [(ident) (string) (attr_set_insert)] @tag_list\n) @root",
     "output": [
       {
         "lists": {
@@ -39,7 +39,7 @@ RTX_RULES = [
             "join": ", "
           }
         },
-        "output": "Define the list {name_text} as consisting of {tag_list}."
+        "output": "Define the list {name} as consisting of {tag_list}."
       }
     ]
   },
@@ -52,11 +52,11 @@ RTX_RULES = [
     "output": "all the tags in {set_text}"
   },
   {
-    "pattern": "(output_rule pos: (ident) @pos_text (magic)) @root",
-    "output": "When outputting {pos_text}, just copy the tags from the input."
+    "pattern": "(output_rule pos: (ident) @pos (magic)) @root",
+    "output": "When outputting {pos}, just copy the tags from the input."
   },
   {
-    "pattern": "(output_rule pos: (ident) @pos_text [(ident) (lit_tag)] @tag_list) @root",
+    "pattern": "(output_rule pos: (ident) @pos [(ident) (lit_tag)] @tag_list) @root",
     "output": [
       {
         "lists": {
@@ -64,7 +64,7 @@ RTX_RULES = [
             "join": ", "
           }
         },
-        "output": "When outputting {pos_text}, put the following: {tag_list}."
+        "output": "When outputting {pos}, put the following: {tag_list}."
       }
     ]
   },
@@ -73,19 +73,19 @@ RTX_RULES = [
     "output": "the part of speech tag"
   },
   {
-    "pattern": "(output_rule (lit_tag (ident) @tag_text) @root)",
-    "output": "the literal tag {tag_text}"
+    "pattern": "(output_rule (lit_tag (ident) @tag) @root)",
+    "output": "the literal tag {tag}"
   },
   {
-    "pattern": "(output_rule (ident) @root_text)",
+    "pattern": "(output_rule pos: (ident) (ident) @root_text)",
     "output": "the {root_text} tag"
   },
   {
-    "pattern": "\n(output_rule\n  pos: (ident) @pos_text\n  (lu_cond . (_ (always_tok) value: (_) @val) .)\n) @root",
-    "output": "When outputting {pos_text}, put {val}."
+    "pattern": "\n(output_rule\n  pos: (ident) @pos\n  (lu_cond . (_ (always_tok) value: (_) @val) .)\n) @root",
+    "output": "When outputting {pos}, put {val}."
   },
   {
-    "pattern": "\n(output_rule pos: (ident) @pos_text (lu_cond (_) @op_list)) @root\n        ",
+    "pattern": "\n(output_rule pos: (ident) @pos (lu_cond (_) @op_list)) @root\n        ",
     "output": [
       {
         "lists": {
@@ -94,7 +94,7 @@ RTX_RULES = [
             "html_type": "ol"
           }
         },
-        "output": "When outputting {pos_text}, use the first applicable rule from:\n{op_list}"
+        "output": "When outputting {pos}, use the first applicable rule from:\n{op_list}"
       }
     ]
   },
@@ -192,11 +192,7 @@ RTX_RULES = [
     "output": "contains"
   },
   {
-    "pattern": "(attr_rule (ident) @root_text)",
-    "output": "{root_text}"
-  },
-  {
-    "pattern": "(reduce_rule_group . (ident) @pos_text . (arrow) (reduce_rule) @rule_list) @root",
+    "pattern": "(reduce_rule_group . (ident) @pos . (arrow) (reduce_rule) @rule_list) @root",
     "output": [
       {
         "lists": {
@@ -205,7 +201,7 @@ RTX_RULES = [
             "html_type": "ul"
           }
         },
-        "output": "{pos_text} phrases can be constructed according to the following rules:\n{rule_list}"
+        "output": "{pos} phrases can be constructed according to the following rules:\n{rule_list}"
       }
     ]
   },
@@ -242,7 +238,7 @@ RTX_RULES = [
     "output": "an unknown word"
   },
   {
-    "pattern": "\n(pattern_element\n  (magic)? @magic\n  lemma: [(ident) (string) (attr_set_insert)]? @lemma\n  . (ident) @pos_text\n  (\".\" . [(ident) (attr_set_insert) (string)] @tag_list)?\n  (pattern_clip)? @set_list\n) @root",
+    "pattern": "\n(pattern_element\n  (magic)? @magic\n  lemma: [(ident) (string) (attr_set_insert)]? @lemma\n  . (ident) @pos\n  (\".\" . [(ident) (attr_set_insert) (string)] @tag_list)?\n  (pattern_clip)? @set_list\n) @root",
     "output": [
       {
         "cond": [
@@ -259,7 +255,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with {lemma} and part-of-speech tag {pos} followed by {tag_list}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -281,7 +277,7 @@ RTX_RULES = [
             "has": "tag_list"
           }
         ],
-        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with part-of-speech tag {pos} followed by {tag_list}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -303,7 +299,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with {lemma} and part-of-speech tag {pos}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -322,7 +318,7 @@ RTX_RULES = [
             "has": "set_list"
           }
         ],
-        "output": "a word part-of-speech tag {pos_text}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with part-of-speech tag {pos}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -344,7 +340,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with {lemma} and part-of-speech tag {pos} followed by {tag_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -363,7 +359,7 @@ RTX_RULES = [
             "has": "tag_list"
           }
         ],
-        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with part-of-speech tag {pos} followed by {tag_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -382,7 +378,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with {lemma} and part-of-speech tag {pos}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -398,7 +394,7 @@ RTX_RULES = [
             "has": "magic"
           }
         ],
-        "output": "a word part-of-speech tag {pos_text}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "output": "a word with part-of-speech tag {pos}, from which copy any tag needed by the chunk which is not specified somewhere else",
         "lists": {
           "set_list": {
             "join": ", "
@@ -420,7 +416,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}",
+        "output": "a word with {lemma} and part-of-speech tag {pos} followed by {tag_list}, from which copy the tags {set_list}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -439,7 +435,7 @@ RTX_RULES = [
             "has": "tag_list"
           }
         ],
-        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}",
+        "output": "a word with part-of-speech tag {pos} followed by {tag_list}, from which copy the tags {set_list}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -458,7 +454,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text}, from which copy the tags {set_list}",
+        "output": "a word with {lemma} and part-of-speech tag {pos}, from which copy the tags {set_list}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -474,7 +470,7 @@ RTX_RULES = [
             "has": "set_list"
           }
         ],
-        "output": "a word part-of-speech tag {pos_text}, from which copy the tags {set_list}",
+        "output": "a word with part-of-speech tag {pos}, from which copy the tags {set_list}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -493,7 +489,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}",
+        "output": "a word with {lemma} and part-of-speech tag {pos} followed by {tag_list}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -509,7 +505,7 @@ RTX_RULES = [
             "has": "tag_list"
           }
         ],
-        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}",
+        "output": "a word with part-of-speech tag {pos} followed by {tag_list}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -525,7 +521,7 @@ RTX_RULES = [
             "has": "lemma"
           }
         ],
-        "output": "a word with {lemma} and part-of-speech tag {pos_text}",
+        "output": "a word with {lemma} and part-of-speech tag {pos}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -537,7 +533,7 @@ RTX_RULES = [
       },
       {
         "cond": [],
-        "output": "a word part-of-speech tag {pos_text}",
+        "output": "a word with part-of-speech tag {pos}",
         "lists": {
           "set_list": {
             "join": ", "
@@ -554,7 +550,7 @@ RTX_RULES = [
     "output": "a lemma in the list {root_text}"
   },
   {
-    "pattern": "(pattern_clip (ident) @attr_text (clip_side)? @clip) @root",
+    "pattern": "(pattern_clip (ident) @attr (clip_side)? @clip) @root",
     "output": [
       {
         "cond": [
@@ -562,10 +558,10 @@ RTX_RULES = [
             "has": "clip"
           }
         ],
-        "output": "{attr_text} from the {clip} side"
+        "output": "{attr} from the {clip} side"
       },
       {
-        "output": "{attr_text}"
+        "output": "{attr}"
       }
     ]
   },
@@ -594,7 +590,7 @@ RTX_RULES = [
     "output": "every tag in {set_text}"
   },
   {
-    "pattern": "(retag_rule src_attr: (ident) @src_text trg_attr: (ident) @trg_text (attr_pair) @pair_list) @root",
+    "pattern": "(retag_rule src_attr: (ident) @src trg_attr: (ident) @trg (attr_pair) @pair_list) @root",
     "output": [
       {
         "lists": {
@@ -602,7 +598,7 @@ RTX_RULES = [
             "join": ", "
           }
         },
-        "output": "To change {src_text} to {trg_text}, change: {pair_list}."
+        "output": "To change {src} to {trg}, change: {pair_list}."
       }
     ]
   },
@@ -611,7 +607,7 @@ RTX_RULES = [
     "output": "a space"
   },
   {
-    "pattern": "\n(output_element\n  (conjoin)? @conjoin\n  (insert)? @insert\n  (inserted)? @inserted\n  (magic)? @magic\n  (num) @pos_text\n  (macro_name (ident) @macro_text)?\n  (output_var_set)? @vars\n) @root",
+    "pattern": "\n(output_element\n  (conjoin)? @conjoin\n  (insert)? @insert\n  (inserted)? @inserted\n  (magic)? @magic\n  (num) @pos_text\n  (macro_name (ident) @macro)?\n  (output_var_set)? @vars\n) @root",
     "output": [
       {
         "cond": [
@@ -628,13 +624,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -652,10 +648,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -709,13 +705,13 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -730,10 +726,10 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, which should be joined to the preceding word, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -781,13 +777,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -802,10 +798,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -850,13 +846,13 @@ RTX_RULES = [
             "has": "insert"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -868,10 +864,10 @@ RTX_RULES = [
             "has": "insert"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, which should be made a child of the preceding chunk, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -913,13 +909,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -934,10 +930,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -982,13 +978,13 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, which should be joined to the preceding word, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -1000,10 +996,10 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, which should be joined to the preceding word, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -1042,13 +1038,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -1060,10 +1056,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -1099,13 +1095,13 @@ RTX_RULES = [
             "has": "vars"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -1114,10 +1110,10 @@ RTX_RULES = [
             "has": "vars"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with the following tags being overridden: {vars}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with the following tags being overridden: {vars}",
         "lists": {}
       },
       {
@@ -1153,13 +1149,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1174,10 +1170,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1222,13 +1218,13 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1240,10 +1236,10 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1282,13 +1278,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1300,10 +1296,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1339,13 +1335,13 @@ RTX_RULES = [
             "has": "insert"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1354,10 +1350,10 @@ RTX_RULES = [
             "has": "insert"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be made a child of the preceding chunk",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, which should be made a child of the preceding chunk",
         "lists": {}
       },
       {
@@ -1390,13 +1386,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
         "lists": {}
       },
       {
@@ -1408,10 +1404,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying, which should be joined to the preceding word",
         "lists": {}
       },
       {
@@ -1447,13 +1443,13 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, which should be joined to the preceding word",
         "lists": {}
       },
       {
@@ -1462,10 +1458,10 @@ RTX_RULES = [
             "has": "conjoin"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, which should be joined to the preceding word",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, which should be joined to the preceding word",
         "lists": {}
       },
       {
@@ -1495,13 +1491,13 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying",
         "lists": {}
       },
       {
@@ -1510,10 +1506,10 @@ RTX_RULES = [
             "has": "magic"
           },
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}, with all tag slots which correspond to something on the chunk being filled in by copying",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}, with all tag slots which correspond to something on the chunk being filled in by copying",
         "lists": {}
       },
       {
@@ -1540,22 +1536,22 @@ RTX_RULES = [
       {
         "cond": [
           {
-            "has": "macro_text"
+            "has": "macro"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro_text}",
+        "output": "the word in position {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, as if it had part-of-speech tag {macro}",
         "lists": {}
       },
       {
         "cond": [
           {
-            "has": "macro_text"
+            "has": "macro"
           }
         ],
-        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro_text}",
+        "output": "the word in position {pos_text}, as if it had part-of-speech tag {macro}",
         "lists": {}
       },
       {
@@ -1575,8 +1571,8 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "(set_var name: (ident) @name_text value: (_) @val) @root",
-    "output": "set the tag {name_text} to {val}"
+    "pattern": "(set_var name: (ident) @name value: (_) @val) @root",
+    "output": "set the tag {name} to {val}"
   },
   {
     "pattern": "(output_var_set (set_var) @set_list) @root",
@@ -1592,16 +1588,16 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "(clip val: (ident) @tag_text) @root",
-    "output": "{tag_text}"
+    "pattern": "(clip val: (ident) @tag) @root",
+    "output": "{tag}"
   },
   {
-    "pattern": "\n(clip\n  (inserted)? @inserted\n  pos: (num) @pos_text\n  attr: (ident) @attr_text\n  (clip_side)? @side\n  convert: (ident)? @conv_text\n) @root\n        ",
+    "pattern": "\n(clip\n  (inserted)? @inserted\n  pos: (num) @pos_text\n  attr: (ident) @attr\n  (clip_side)? @side\n  convert: (ident)? @conv\n) @root\n        ",
     "output": [
       {
         "cond": [
           {
-            "has": "conv_text"
+            "has": "conv"
           },
           {
             "has": "inserted"
@@ -1610,61 +1606,61 @@ RTX_RULES = [
             "has": "side"
           }
         ],
-        "output": "the {side} {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, using the conversion rules to change it to a {conv_text} tag",
+        "output": "the {side} {attr} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, using the conversion rules to change it to a {conv} tag",
         "lists": {}
       },
       {
         "cond": [
           {
-            "has": "conv_text"
+            "has": "conv"
           },
           {
             "has": "inserted"
           }
         ],
-        "output": "the {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, using the conversion rules to change it to a {conv_text} tag",
+        "output": "the {attr} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk, using the conversion rules to change it to a {conv} tag",
         "lists": {}
       },
       {
         "cond": [
           {
-            "has": "conv_text"
+            "has": "conv"
           },
           {
             "has": "side"
           }
         ],
-        "output": "the {side} {attr_text} tag of word {pos_text}, using the conversion rules to change it to a {conv_text} tag",
+        "output": "the {side} {attr} tag of word {pos_text}, using the conversion rules to change it to a {conv} tag",
         "lists": {}
       },
       {
         "cond": [
           {
-            "has": "conv_text"
+            "has": "conv"
           }
         ],
-        "output": "the {attr_text} tag of word {pos_text}, using the conversion rules to change it to a {conv_text} tag",
-        "lists": {}
-      },
-      {
-        "cond": [
-          {
-            "has": "inserted"
-          },
-          {
-            "has": "side"
-          }
-        ],
-        "output": "the {side} {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk",
+        "output": "the {attr} tag of word {pos_text}, using the conversion rules to change it to a {conv} tag",
         "lists": {}
       },
       {
         "cond": [
           {
             "has": "inserted"
+          },
+          {
+            "has": "side"
           }
         ],
-        "output": "the {attr_text} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk",
+        "output": "the {side} {attr} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "inserted"
+          }
+        ],
+        "output": "the {attr} tag of word {pos_text}, if that position has been created by a parent chunk inserting a word into this chunk",
         "lists": {}
       },
       {
@@ -1673,14 +1669,18 @@ RTX_RULES = [
             "has": "side"
           }
         ],
-        "output": "the {side} {attr_text} tag of word {pos_text}",
+        "output": "the {side} {attr} tag of word {pos_text}",
         "lists": {}
       },
       {
         "cond": [],
-        "output": "the {attr_text} tag of word {pos_text}",
+        "output": "the {attr} tag of word {pos_text}",
         "lists": {}
       }
     ]
+  },
+  {
+    "pattern": "(ident) @root_text",
+    "output": "{root_text}"
   }
 ];

@@ -155,6 +155,36 @@ function get_highlights(tree, lang) {
   return ret;
 }
 
+function gloss_tags(lang, tree) {
+  if (lang == 'RTX') {
+    let tag = {};
+    let skip = [];
+    for (let obj of langs.RTX.query(RTX_TAG_QUERY).captures(tree.rootNode)) {
+      if (obj.name == 'tag') {
+        tag[obj.node.id] = obj.node.text;
+      } else {
+        skip.push(obj.node.id);
+      }
+    }
+    for (let id of skip) {
+      tag[id] = undefined;
+    }
+    for (let k in tag) {
+      let exp = tag[k].replace(/["<>%]/g, '').split('.').map(x => TAGS[x]).filter(x => (x != undefined)).join(', ');
+      if (exp.length > 0) {
+        $('*[data-id="'+k+'"]').attr('data-note', exp);
+      }
+    }
+  }
+}
+
+function show_highlights() {
+  let hl = $('.highlighted');
+  if (hl.length > 0) {
+    hl[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }
+}
+
 function update_output() {
   if (Parser == null) return;
   let lang = $('#parser').val();
@@ -171,6 +201,7 @@ function update_output() {
   $('#code').html(make_spans(lines, tree, highlights));
   if (lang == 'RTX') {
     $('#tree').html(translate(rules.RTX, tree, true));
+    gloss_tags(lang, tree);
   } else {
     $('#tree').html(make_tree(tree.rootNode));
   }
@@ -178,14 +209,14 @@ function update_output() {
     let i = e.target.getAttribute('data-id');
     $('.highlighted').removeClass('highlighted');
     $('*[data-spans~="'+i+'"]').addClass('highlighted');
-    $('.highlighted')[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    show_highlights();
   });
   $('.code-line,.code-seg').mouseover(function(e) {
     let sp = e.target.getAttribute('data-spans');
     if (sp === null) return;
     $('.highlighted').removeClass('highlighted');
     sp.split(' ').forEach(i => $('*[data-id="'+i+'"]').addClass('highlighted'));
-    $('.highlighted')[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    show_highlights();
   });
 }
 
