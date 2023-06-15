@@ -14,7 +14,12 @@ make_wasm () {
     cp "../tree-sitter-apertium/tree-sitter-$1/tree-sitter-$1.wasm" wasm/
 }
 
+make_wasm cg
+make_wasm lexc
+make_wasm lexd
 make_wasm rtx
+make_wasm twolc
+make_wasm xfst
 
 make_rules () {
     pushd "../code2text-$1"

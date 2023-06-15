@@ -69,7 +69,7 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "(output_rule (ident) @root (#match? @root \"^_$\"))",
+    "pattern": "(output_rule (ident) @root (#eq? @root \"_\"))",
     "output": "the part of speech tag"
   },
   {
@@ -85,7 +85,7 @@ RTX_RULES = [
     "output": "When outputting {pos_text}, put {val}."
   },
   {
-    "pattern": "\n(output_rule pos: (ident) @pos_text (lu_cond \"(\" (_) @op_list \")\")) @root\n        ",
+    "pattern": "\n(output_rule pos: (ident) @pos_text (lu_cond (_) @op_list)) @root\n        ",
     "output": [
       {
         "lists": {
@@ -132,8 +132,64 @@ RTX_RULES = [
     "output": "not"
   },
   {
-    "pattern": "(str_op) @root_text",
-    "output": "{root_text}"
+    "pattern": "(str_op (_) @op) @root",
+    "output": "{op}"
+  },
+  {
+    "pattern": "((str_op_eq) @root (#match? @root \".*[cCfF].*\"))",
+    "output": "equals (ignoring capitalization)"
+  },
+  {
+    "pattern": "(str_op_eq) @root",
+    "output": "="
+  },
+  {
+    "pattern": "((str_op_isprefix) @root (#match? @root \".*[cCdD].*\"))",
+    "output": "starts with (ignoring capitalization)"
+  },
+  {
+    "pattern": "(str_op_isprefix) @root",
+    "output": "starts with"
+  },
+  {
+    "pattern": "((str_op_hasprefix) @root (#match? @root \".*[cCdD].*\"))",
+    "output": "starts with (ignoring capitalization) an element of"
+  },
+  {
+    "pattern": "(str_op_hasprefix) @root",
+    "output": "starts with an element of"
+  },
+  {
+    "pattern": "((str_op_issuffix) @root (#match? @root \".*[cClL].*\"))",
+    "output": "ends with (ignoring capitalization)"
+  },
+  {
+    "pattern": "(str_op_issuffix) @root",
+    "output": "ends with"
+  },
+  {
+    "pattern": "((str_op_hassuffix) @root (#match? @root \".*[cCoO].*\"))",
+    "output": "ends with (ignoring capitalization) an element of"
+  },
+  {
+    "pattern": "(str_op_hassuffix) @root",
+    "output": "ends with an element of"
+  },
+  {
+    "pattern": "((str_op_in) @root (#match? @root \".*[cCfF].*\"))",
+    "output": "is (ignoring capitalization) an element of"
+  },
+  {
+    "pattern": "(str_op_in) @root",
+    "output": "is an element of"
+  },
+  {
+    "pattern": "((str_op_contains) @root (#match? @root \".*[lLfF].*\"))",
+    "output": "contains (ignoring capitalization)"
+  },
+  {
+    "pattern": "(str_op_contains) @root",
+    "output": "contains"
   },
   {
     "pattern": "(attr_rule (ident) @root_text)",
@@ -186,29 +242,344 @@ RTX_RULES = [
     "output": "an unknown word"
   },
   {
-    "pattern": "\n(pattern_element\n  (magic)? @magic\n  . (ident) @pos_text\n  (\".\" . [(ident) (attr_set_insert) (string)] @tag_list)?\n  (\"$\" . (ident) @set_list)?\n) @root",
+    "pattern": "\n(pattern_element\n  (magic)? @magic\n  lemma: [(ident) (string) (attr_set_insert)]? @lemma\n  . (ident) @pos_text\n  (\".\" . [(ident) (attr_set_insert) (string)] @tag_list)?\n  (pattern_clip)? @set_list\n) @root",
     "output": [
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "set_list"
+          },
+          {
+            "has": "tag_list"
+          },
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "set_list"
+          },
+          {
+            "has": "tag_list"
+          }
+        ],
+        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "set_list"
+          },
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "set_list"
+          }
+        ],
+        "output": "a word part-of-speech tag {pos_text}, from which copy the tags {set_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "tag_list"
+          },
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "tag_list"
+          }
+        ],
+        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          },
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "magic"
+          }
+        ],
+        "output": "a word part-of-speech tag {pos_text}, from which copy any tag needed by the chunk which is not specified somewhere else",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "set_list"
+          },
+          {
+            "has": "tag_list"
+          },
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "set_list"
+          },
+          {
+            "has": "tag_list"
+          }
+        ],
+        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}, from which copy the tags {set_list}",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "set_list"
+          },
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text}, from which copy the tags {set_list}",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
       {
         "cond": [
           {
             "has": "set_list"
           }
         ],
+        "output": "a word part-of-speech tag {pos_text}, from which copy the tags {set_list}",
         "lists": {
           "set_list": {
             "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
           }
-        },
-        "output": "a word with part-of-speech {pos_text}, from which copy the tags {tag_list}"
+        }
       },
       {
-        "output": "a word with part-of-speech {pos_text}"
+        "cond": [
+          {
+            "has": "tag_list"
+          },
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text} followed by {tag_list}",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "tag_list"
+          }
+        ],
+        "output": "a word part-of-speech tag {pos_text} followed by {tag_list}",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [
+          {
+            "has": "lemma"
+          }
+        ],
+        "output": "a word with {lemma} and part-of-speech tag {pos_text}",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "a word part-of-speech tag {pos_text}",
+        "lists": {
+          "set_list": {
+            "join": ", "
+          },
+          "tag_list": {
+            "join": ", "
+          }
+        }
       }
     ]
   },
   {
-    "pattern": "(pattern_element (ident) @root_text)",
-    "output": "{root_text}"
+    "pattern": "(pattern_element (attr_prefix) . (ident) @root_text)",
+    "output": "a lemma in the list {root_text}"
+  },
+  {
+    "pattern": "(pattern_clip (ident) @attr_text (clip_side)? @clip) @root",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "clip"
+          }
+        ],
+        "output": "{attr_text} from the {clip} side"
+      },
+      {
+        "output": "{attr_text}"
+      }
+    ]
+  },
+  {
+    "pattern": "((clip_side) @root (#eq? @root \"/sl\"))",
+    "output": "source"
+  },
+  {
+    "pattern": "((clip_side) @root (#eq? @root \"/tl\"))",
+    "output": "target"
+  },
+  {
+    "pattern": "((clip_side) @root (#eq? @root \"/ref\"))",
+    "output": "reference"
   },
   {
     "pattern": "(attr_pair src: (_) @src trg: (_) @trg) @root",

@@ -172,7 +172,7 @@ function update_output() {
     let sp = e.target.getAttribute('data-spans');
     if (sp === null) return;
     $('.highlighted').removeClass('highlighted');
-    sp.split(' ').forEach(i => {console.log(i); $('*[data-id="'+i+'"]').addClass('highlighted')});
+    sp.split(' ').forEach(i => $('*[data-id="'+i+'"]').addClass('highlighted'));
   });
 }
 
