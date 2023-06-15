@@ -89,7 +89,7 @@ function make_spans(lines, tree, highlights) {
   };
   get_ranges(tree.rootNode);
   return lines.map(function(line, lineno) {
-    let ret = '<p class="code-line '+hl_cls(blob[lineno].whole)+'" data-spans="' + blob[lineno].whole.join(' ') + '" data-line="'+lineno+'">';
+    let ret = '<p class="code-line '+hl_cls(blob[lineno].whole)+'" data-spans="' + blob[lineno].whole.join(' ') + '" data-line="'+(lineno+1)+'">';
     let spans = [];
     for (let k in blob[lineno]) {
       if (blob[lineno].hasOwnProperty(k) && k != 'whole') {
@@ -127,6 +127,9 @@ function make_spans(lines, tree, highlights) {
       new_segs = new_segs.concat(segs.slice(j+1));
       segs = new_segs;
     }
+    if (segs.length == 1 && segs[0][1].length == 0) {
+      segs[0][1] = '<br/>';
+    }
     ret += segs.map((s) => '<span class="code-seg '+hl_cls(s[2])+'" data-spans="'+s[2].join(' ')+'">'+s[1]+'</span>').join('');
     ret += '</p>';
     return ret;
@@ -156,6 +159,10 @@ function update_output() {
   if (Parser == null) return;
   let lang = $('#parser').val();
   let text = document.getElementById('code').innerText;
+  if (!text.match(/[^\n]\n[^\n]/)) {
+    text = text.replace(/\n\n\n?/g, '\n');
+  }
+  text = text.trimEnd();
   console.log(lang);
   Parser.setLanguage(langs[lang]);
   let lines = text.split('\n');
