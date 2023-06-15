@@ -31,6 +31,7 @@ TSParser.init().then(async function () {
   console.log("Languages loaded");
   rules.RTX = load_patterns(langs.RTX, RTX_RULES);
   console.log("Rules loaded");
+  $('#update').click();
 });
 
 function make_spans(lines, tree, highlights) {
@@ -88,7 +89,7 @@ function make_spans(lines, tree, highlights) {
   };
   get_ranges(tree.rootNode);
   return lines.map(function(line, lineno) {
-    let ret = '<p class="code-line '+hl_cls(blob[lineno].whole)+'" data-spans="' + blob[lineno].whole.join(' ') + '"><span class="lineno">'+lineno+'</span> ';
+    let ret = '<p class="code-line '+hl_cls(blob[lineno].whole)+'" data-spans="' + blob[lineno].whole.join(' ') + '" data-line="'+lineno+'">';
     let spans = [];
     for (let k in blob[lineno]) {
       if (blob[lineno].hasOwnProperty(k) && k != 'whole') {
@@ -145,15 +146,18 @@ function get_highlights(tree, lang) {
   for (let obj of caps) {
     ret[obj.node.id] = obj.name.replace('.', '-');
   }
+  for (let obj of langs[lang].query('(ERROR) @x').captures(tree.rootNode)) {
+    ret[obj.node.id] = 'error';
+  }
   return ret;
 }
 
 function update_output() {
   if (Parser == null) return;
   let lang = $('#parser').val();
+  let text = document.getElementById('code').innerText;
   console.log(lang);
   Parser.setLanguage(langs[lang]);
-  let text = $('#input').val();
   let lines = text.split('\n');
   let tree = Parser.parse(text);
   let highlights = get_highlights(tree, lang);
@@ -177,5 +181,6 @@ function update_output() {
 }
 
 $(function() {
-  $('#input').change(update_output);
+  $('#update').click(update_output);
+  $('#update').click();
 });

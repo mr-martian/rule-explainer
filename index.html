@@ -16,7 +16,7 @@
           border: 1px dashed grey;
       }
       #code {
-          width: 50%;
+          width: 100%;
           white-space: pre;
           font-family: monospace;
       }
@@ -24,14 +24,7 @@
           margin-top: 0px;
           margin-bottom: 0px;
       }
-      .lineno {
-          color: black;
-          background: lightgrey;
-          display: inline-block;
-          text-align: right;
-          width: 25px;
-      }
-      #tree {
+      td {
           width: 50%;
       }
       #tree p {
@@ -62,6 +55,21 @@
       .comment {
           color: grey;
       }
+      .error {
+          background: red;
+      }
+      .code-line::before {
+          content: attr(data-line);
+          color: black;
+          background: lightgrey;
+          display: inline-block;
+          text-align: right;
+          width: 30px;
+          margin-right: 5px;
+      }
+      .code-line:nth-child(odd) {
+          background: #EEEEEE;
+      }
     </style>
   </head>
   <body>
@@ -73,10 +81,13 @@
       <!--<option value="TWOLC">HFST TwoLC</option>-->
       <!--<option value="XFST">HFST XFST</option>-->
     </select>
-    <textarea id="input"></textarea>
+    <button id="update">Update Explanation</button>
     <table id="display">
       <tbody>
-        <tr><td id="code"></td><td id="tree"></td></tr>
+        <tr>
+          <td><div id="code" contenteditable>! type code here</div></td>
+          <td id="tree"></td>
+        </tr>
       </tbody>
     </table>
   </body>
