@@ -4,18 +4,22 @@ RTX_RULES = [
     "output": ""
   },
   {
-    "pattern": "(source_file (_) @thing_list) @root",
+    "pattern": "\n(source_file\n  [(attr_rule) (output_rule) (retag_rule) (reduce_rule_group)] @thing_list\n) @root",
     "output": [
       {
         "lists": {
           "thing_list": {
-            "join": "\n",
+            "join": "\n\n",
             "html_type": "p"
           }
         },
         "output": "{thing_list}"
       }
     ]
+  },
+  {
+    "pattern": "(source_file) @root",
+    "output": ""
   },
   {
     "pattern": "\n(attr_rule\n  name: (ident) @name\n  (attr_default src: (ident) @src trg: (_) @trg_text)\n  [(ident) (string) (attr_set_insert)] @tag_list\n) @root",
@@ -81,11 +85,11 @@ RTX_RULES = [
     "output": "the {root_text} tag"
   },
   {
-    "pattern": "\n(output_rule\n  pos: (ident) @pos\n  (lu_cond . (_ (always_tok) value: (_) @val) .)\n) @root",
+    "pattern": "\n(output_rule\n  pos: (ident) @pos\n  (lu_cond . (choice (always_tok) value: (_) @val) .)\n) @root",
     "output": "When outputting {pos}, put {val}."
   },
   {
-    "pattern": "\n(output_rule pos: (ident) @pos (lu_cond (_) @op_list)) @root\n        ",
+    "pattern": "\n(output_rule pos: (ident) @pos (lu_cond (choice) @op_list)) @root\n        ",
     "output": [
       {
         "lists": {
@@ -99,12 +103,34 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "(lu_cond (_ cond: (_) @cond value: (_) @val) @root)",
+    "pattern": "(lu_cond (choice cond: (_) @cond value: (_) @val) @root)",
     "output": "If {cond}, put {val}."
   },
   {
-    "pattern": "(lu_cond (_ (else_tok) value: (_) @val) @root)",
+    "pattern": "(lu_cond (choice (else_tok) value: (_) @val) @root)",
     "output": "Otherwise, put {val}."
+  },
+  {
+    "pattern": "(string_cond (choice) @c_list) @root",
+    "output": [
+      {
+        "lists": {
+          "c_list": {
+            "join": "\n",
+            "html_type": "ol"
+          }
+        },
+        "output": "the first of the following that applies:\n{c_list}\n"
+      }
+    ]
+  },
+  {
+    "pattern": "(string_cond (choice cond: (_) @cond value: (_) @val) @root)",
+    "output": "If {cond}, then {val}."
+  },
+  {
+    "pattern": "(string_cond (choice value: (_) @val) @root)",
+    "output": "Otherwise, {val}."
   },
   {
     "pattern": "(condition . \"(\" (_) @thing_list \")\" .) @root",
@@ -1571,6 +1597,86 @@ RTX_RULES = [
     ]
   },
   {
+    "pattern": "\n(output_element\n  (conjoin)? @conjoin\n  (insert)? @insert\n  (global_var_prefix)\n  (ident) @var\n) @root\n",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "the global variable {var}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          }
+        ],
+        "output": "the global variable {var}, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "the global variable {var}, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "the global variable {var}",
+        "lists": {}
+      }
+    ]
+  },
+  {
+    "pattern": "\n(output_element\n  (conjoin)? @conjoin\n  (insert)? @insert\n  (literal_lu) @lu\n) @root\n",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "insert"
+          },
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "{lu}, which should be joined to the preceding word, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "insert"
+          }
+        ],
+        "output": "{lu}, which should be made a child of the preceding chunk",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conjoin"
+          }
+        ],
+        "output": "{lu}, which should be joined to the preceding word",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "{lu}",
+        "lists": {}
+      }
+    ]
+  },
+  {
     "pattern": "(set_var name: (ident) @name value: (_) @val) @root",
     "output": "set the tag {name} to {val}"
   },
@@ -1680,7 +1786,135 @@ RTX_RULES = [
     ]
   },
   {
-    "pattern": "(ident) @root_text",
+    "pattern": "\n(clip\n  pos: (attr_prefix)\n  attr: (ident) @attr\n  (clip_side)? @side\n  convert: (ident)? @conv\n) @root\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "conv"
+          },
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr} tag of the chunk, using the conversion rules to change it to a {conv} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conv"
+          }
+        ],
+        "output": "the {attr} tag of the chunk, using the conversion rules to change it to a {conv} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr} tag of the chunk",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "the {attr} tag of the chunk",
+        "lists": {}
+      }
+    ]
+  },
+  {
+    "pattern": "\n(clip\n  (global_var_prefix)\n  var_name: (ident) @var\n  attr: (ident) @attr\n  (clip_side)? @side\n  convert: (ident)? @conv\n) @root\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "conv"
+          },
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr} tag of the global variable {var}, using the conversion rules to change it to a {conv} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "conv"
+          }
+        ],
+        "output": "the {attr} tag of the global variable {var}, using the conversion rules to change it to a {conv} tag",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "side"
+          }
+        ],
+        "output": "the {side} {attr} tag of the global variable {var}",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "the {attr} tag of the global variable {var}",
+        "lists": {}
+      }
+    ]
+  },
+  {
+    "pattern": "\n(literal_lu\n  lemma: (_) @lem [(ident) (clip) (string_cond)] @tag_list\n  lemcase: (clip)? @lemcase\n) @root",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "lemcase"
+          }
+        ],
+        "lists": {
+          "tag_list": {
+            "join": ", "
+          }
+        },
+        "output": "a word with lemma {lem} and capitalization matching {lemcase} and the following tags: {tag_list}"
+      },
+      {
+        "lists": {
+          "tag_list": {
+            "join": ", "
+          }
+        },
+        "output": "a word with lemma {lem} and the following tags: {tag_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "\n(lu_sequence\n  [(output_element) (blank) (numbered_blank) (lu_cond) (lu_sequence)] @thing_list\n) @root\n        ",
+    "output": [
+      {
+        "lists": {
+          "thing_list": {
+            "join": ", ",
+            "html_type": "ol"
+          }
+        },
+        "output": "{thing_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(lu_sequence) @root",
+    "output": "nothing"
+  },
+  {
+    "pattern": "(literal_lu parent_tag: (ident) @root_text)",
+    "output": "the {root_text} tag from the chunk"
+  },
+  {
+    "pattern": "[(ident) (string)] @root_text",
     "output": "{root_text}"
   }
 ];

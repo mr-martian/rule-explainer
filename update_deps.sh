@@ -14,12 +14,16 @@ make_wasm () {
     cp "../tree-sitter-apertium/tree-sitter-$1/tree-sitter-$1.wasm" wasm/
 }
 
-make_wasm cg
-make_wasm lexc
-make_wasm lexd
-make_wasm rtx
-make_wasm twolc
-make_wasm xfst
+if [[ "x$1" == "xall" ]]
+then
+    echo "recompiling wasm"
+    make_wasm cg
+    make_wasm lexc
+    make_wasm lexd
+    make_wasm rtx
+    make_wasm twolc
+    make_wasm xfst
+fi
 
 make_rules () {
     pushd "../code2text-$1"
@@ -32,8 +36,6 @@ EOF
 }
 
 make_rules rtx
-# TODO: js bindings for tree-sitter reject "choice" as a node name
-sed -i 's/choice/_/g' rules/rtx.js
 
 make_highlight () {
     echo "$1"'_highlight = `[' > "highlight/$1.js"

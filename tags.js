@@ -289,4 +289,5 @@ var RTX_TAG_QUERY = `
 (clip val: (ident) @tag) ; may include list names
 (pattern_element pos: (ident) @tag)
 (pattern_element "." . [(ident) (string)] @tag)
+(string) @tag
 `;
