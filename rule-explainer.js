@@ -30,6 +30,7 @@ TSParser.init().then(async function () {
   Parser = new TSParser();
   console.log("Languages loaded");
   rules.RTX = load_patterns(langs.RTX, RTX_RULES);
+  rules.TWOLC = load_patterns(langs.TWOLC, TWOLC_RULES);
   console.log("Rules loaded");
   $('#update').click();
 });
@@ -144,6 +145,8 @@ function get_highlights(tree, lang) {
   let caps = [];
   if (lang == 'RTX') {
     caps = langs.RTX.query(rtx_highlight).captures(tree.rootNode);
+  } else if (lang == 'TWOLC') {
+    caps = langs.TWOLC.query(twolc_highlight).captures(tree.rootNode);
   }
   let ret = {};
   for (let obj of caps) {
@@ -202,6 +205,8 @@ function update_output() {
   if (lang == 'RTX') {
     $('#tree').html(translate(rules.RTX, tree, true));
     gloss_tags(lang, tree);
+  } else if (lang == 'TWOLC') {
+    $('#tree').html(translate(rules.TWOLC, tree, true));
   } else {
     $('#tree').html(make_tree(tree.rootNode));
   }

@@ -36,6 +36,7 @@ EOF
 }
 
 make_rules rtx
+make_rules twolc
 
 make_highlight () {
     echo "$1"'_highlight = `[' > "highlight/$1.js"
@@ -44,3 +45,4 @@ make_highlight () {
 }
 
 make_highlight rtx
+make_highlight twolc

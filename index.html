@@ -6,7 +6,9 @@
     <script src="js-code2text/code2text.js"></script>
     <script src="rule-explainer.js"></script>
     <script src="rules/rtx.js"></script>
+    <script src="rules/twolc.js"></script>
     <script src="highlight/rtx.js"></script>
+    <script src="highlight/twolc.js"></script>
     <script src="tags.js"></script>
     <!-- TODO: limit code and explanation to 1/2 window, and wrap code lines-->
     <style>
@@ -46,7 +48,7 @@
       .variable {
           color: purple;
       }
-      .constant-numeric {
+      .constant-numeric, .constant-builtin {
           color: blue;
       }
       .punctuation-delimiter {
@@ -55,11 +57,14 @@
       .constant-string {
           color: brown;
       }
-      .keyword-control {
+      .keyword-control, .keyword {
           color: darkblue;
       }
-      .keyword-operator {
+      .keyword-operator, .operator {
           color: gold;
+      }
+      .string-quoted {
+          color: green;
       }
       .comment {
           color: grey;
@@ -93,7 +98,7 @@
       <!--<option value="LEXC">HFST LexC</option>-->
       <!--<option value="LEXD">Lexd</option>-->
       <option value="RTX">apertium-recursive RTX</option>
-      <!--<option value="TWOLC">HFST TwoLC</option>-->
+      <option value="TWOLC">HFST TwoLC</option>
       <!--<option value="XFST">HFST XFST</option>-->
     </select>
     <button id="update">Update Explanation</button>
