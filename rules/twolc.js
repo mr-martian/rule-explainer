@@ -179,6 +179,14 @@ TWOLC_RULES = [
     "output": "{l} which becomes {r}"
   },
   {
+    "pattern": "(symbol_pair right: (symbol) @r) @root",
+    "output": "any symbol which becomes {r}"
+  },
+  {
+    "pattern": "(symbol_pair left: (symbol) @l) @root",
+    "output": "{l} which becomes anything"
+  },
+  {
     "pattern": "((bool_op) @root (#eq? @root \"|\"))",
     "output": "or"
   },
@@ -197,5 +205,17 @@ TWOLC_RULES = [
   {
     "pattern": "(context left: (pattern) @l (locus) @_ right: (pattern) @r) @root",
     "output": "{l}, {_}, {r}"
+  },
+  {
+    "pattern": "(context (locus) @_ right: (pattern) @r) @root",
+    "output": "{_}, {r}"
+  },
+  {
+    "pattern": "(context left: (pattern) @l (locus) @_) @root",
+    "output": "{l}, {_}"
+  },
+  {
+    "pattern": "(context (locus) @_) @root",
+    "output": "anywhere"
   }
 ];
