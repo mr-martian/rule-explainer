@@ -56,9 +56,9 @@ make_rules twolc
 make_rules cg
 
 make_highlight () {
-    echo 'HIGHLIGHT["'$1'".toUpperCase()] = `[' >> "data.js"
-    cat "../tree-sitter-apertium/tree-sitter-$1/queries/highlights.scm" | grep -v "#match" >> "data.js"
-    echo ']`;' >> "data.js"
+    echo 'HIGHLIGHT["'$1'".toUpperCase()] = `' >> "data.js"
+    cat "../tree-sitter-apertium/tree-sitter-$1/queries/highlights.scm" >> "data.js"
+    echo '`;' >> "data.js"
     echo '' >> data.js
 }
 

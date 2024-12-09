@@ -2401,7 +2401,7 @@ RULES.CG = [
   }
 ];
 
-HIGHLIGHT["rtx".toUpperCase()] = `[
+HIGHLIGHT["rtx".toUpperCase()] = `
 [
   (arrow)
   (str_op)
@@ -2438,9 +2438,9 @@ HIGHLIGHT["rtx".toUpperCase()] = `[
  trg: (ident) @variable) ; (ND "") highlight trg as string
 (attr_rule
  name: (ident) @variable)
-]`;
+`;
 
-HIGHLIGHT["twolc".toUpperCase()] = `[
+HIGHLIGHT["twolc".toUpperCase()] = `
 (comment) @comment
 
 [
@@ -2455,6 +2455,7 @@ HIGHLIGHT["twolc".toUpperCase()] = `[
  (any)
 ] @constant.builtin
 ((symbol) @constant.builtin
+ (#match? @constant.builtin "0"))
 
 [
  (colon)
@@ -2491,9 +2492,9 @@ HIGHLIGHT["twolc".toUpperCase()] = `[
 
 (definition name: (symbol) @function)
 (set name: (symbol) @function)
-]`;
+`;
 
-HIGHLIGHT["cg".toUpperCase()] = `[
+HIGHLIGHT["cg".toUpperCase()] = `
 [
   (section_header)
   (END)
@@ -2552,6 +2553,7 @@ HIGHLIGHT["cg".toUpperCase()] = `[
 
 (taglist) @constant.other.symbol
 
+((setname) @variable.parameter (#match? @variable.parameter "\$\$.*"))
 
 (list (setname) @variable)
 (set (setname) @variable)
@@ -2563,5 +2565,5 @@ HIGHLIGHT["cg".toUpperCase()] = `[
   (SUBREADINGS)
   (PARENTHESES)
 ] @keyword.other.special-method
-]`;
+`;
 
