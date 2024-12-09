@@ -1,4 +1,14 @@
-RTX_RULES = [
+var WASM = [];
+var RULES = {};
+var HIGHLIGHT = {};
+
+WASM.push(['rtx'.toUpperCase(), 'wasm/tree-sitter-rtx.wasm']);
+
+WASM.push(['twolc'.toUpperCase(), 'wasm/tree-sitter-twolc.wasm']);
+
+WASM.push(['cg'.toUpperCase(), 'wasm/tree-sitter-cg.wasm']);
+
+RULES.RTX = [
   {
     "pattern": "[\"{\" \"}\" (comment)] @root",
     "output": ""
@@ -1918,3 +1928,640 @@ RTX_RULES = [
     "output": "{root_text}"
   }
 ];
+
+RULES.TWOLC = [
+  {
+    "pattern": "[(comment) (semicolon)] @root",
+    "output": ""
+  },
+  {
+    "pattern": "\n(source_file\n  [(alphabet) (sets) (definitions) (diacritics) (rule_variables) (rules)] @thing_list\n) @root",
+    "output": [
+      {
+        "lists": {
+          "thing_list": {
+            "join": "\n\n",
+            "html_type": "p"
+          }
+        },
+        "output": "{thing_list}\n"
+      }
+    ]
+  },
+  {
+    "pattern": "(source_file) @root",
+    "output": ""
+  },
+  {
+    "pattern": "(alphabet [(symbol) (symbol_pair)] @sym_list) @root",
+    "output": [
+      {
+        "lists": {
+          "sym_list": {
+            "join": "\n",
+            "html_type": "ul"
+          }
+        },
+        "output": "The following mappings are possible:\n{sym_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(alphabet (symbol) @root_text)",
+    "output": "An underlying {root_text} remains unchanged (surfaces as {root_text})"
+  },
+  {
+    "pattern": "(alphabet (symbol_pair left: (symbol) @l_text right: (symbol) @r_text) @root (#eq? @r_text \"0\"))",
+    "output": "An underlying {l_text} is deleted"
+  },
+  {
+    "pattern": "(alphabet (symbol_pair left: (symbol) @l_text right: (symbol) @r_text) @root)",
+    "output": "An underlying {l_text} surfaces as {r_text}"
+  },
+  {
+    "pattern": "(sets (set) @set_list) @root",
+    "output": [
+      {
+        "lists": {
+          "set_list": {
+            "join": "\n",
+            "html_type": "ul"
+          }
+        },
+        "output": "We define the following sets of symbols:\n{set_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(set name: (symbol) @name_text [(symbol) (symbol_pair)] @thing_list) @root",
+    "output": [
+      {
+        "lists": {
+          "thing_list": {
+            "join": ", "
+          }
+        },
+        "output": "The set {name_text} contains {thing_list}."
+      }
+    ]
+  },
+  {
+    "pattern": "(set (symbol) @root_text)",
+    "output": "{root_text}"
+  },
+  {
+    "pattern": "(rules (rule) @rule_list) @root",
+    "output": [
+      {
+        "lists": {
+          "rule_list": {
+            "join": "\n\n",
+            "html_type": "p"
+          }
+        },
+        "output": "The mappings are constrained by the following rules:\n\n{rule_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(rule (rule_name) @name_text [(symbol) (symbol_pair)] @target (arrow) @arrow (positive_contexts) @pos) @root",
+    "output": "{target} {arrow} it occurs in one of the following contexts:\n{pos}"
+  },
+  {
+    "pattern": "((arrow) @root (#eq? @root \"<=>\"))",
+    "output": "if and only if"
+  },
+  {
+    "pattern": "(rule (symbol_pair left: (symbol) @l_text right: (symbol) @r_text) @root (#eq? @r_text \"0\"))",
+    "output": "{l_text} is deleted"
+  },
+  {
+    "pattern": "(rule (symbol_pair left: (symbol) @l_text right: (symbol) @r_text) @root (#eq? @l_text \"0\"))",
+    "output": "{r_text} is inserted"
+  },
+  {
+    "pattern": "(rule (symbol_pair left: (symbol) @l_text right: (symbol) @r_text) @root)",
+    "output": "{l_text} becomes {r_text}"
+  },
+  {
+    "pattern": "(positive_contexts (context) @ctx_list) @root",
+    "output": [
+      {
+        "lists": {
+          "ctx_list": {
+            "join": "\n -",
+            "html_type": "ul"
+          }
+        },
+        "output": "- {ctx_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(pattern (symbol) @s) @root",
+    "output": "{s}"
+  },
+  {
+    "pattern": "(pattern (symbol_pair) @s) @root",
+    "output": "{s}"
+  },
+  {
+    "pattern": "(pattern (word_boundary) @s) @root",
+    "output": "{s}"
+  },
+  {
+    "pattern": "(pattern (any) @s) @root",
+    "output": "{s}"
+  },
+  {
+    "pattern": "(pattern (lpar) (pattern) @s (rpar)) @root",
+    "output": "({s})"
+  },
+  {
+    "pattern": "(pattern (loptional) (pattern) @s (roptional)) @root",
+    "output": "optional ({s})"
+  },
+  {
+    "pattern": "(pattern (prefix_op) @o (pattern) @s) @root",
+    "output": "{o} {s}"
+  },
+  {
+    "pattern": "(pattern (pattern) @s (suffix_op) @o) @root",
+    "output": "{o} {s}"
+  },
+  {
+    "pattern": "(pattern (pattern) @p1 [(ignore_op) (bool_op) (replace_op) (compose_op)] @o (pattern) @p2) @root",
+    "output": "{p1} {o} {p2}"
+  },
+  {
+    "pattern": "(pattern (pattern) @p1 (pattern) @p2) @root",
+    "output": "{p1}, {p2}"
+  },
+  {
+    "pattern": "(symbol) @root_text",
+    "output": "{root_text}"
+  },
+  {
+    "pattern": "((symbol_pair left: (symbol) @l right: (symbol) @r) @root (#eq? @r \"0\"))",
+    "output": "an underlying {l} which is deleted"
+  },
+  {
+    "pattern": "(symbol_pair left: (symbol) @l right: (symbol) @r) @root",
+    "output": "an underlying {l} which surfaces as {r}"
+  },
+  {
+    "pattern": "(symbol_pair right: (symbol) @r) @root",
+    "output": "a symbol whose surface form is {r}"
+  },
+  {
+    "pattern": "(symbol_pair left: (symbol) @l) @root",
+    "output": "a symbol whose underlying form is {l}"
+  },
+  {
+    "pattern": "((bool_op) @root (#eq? @root \"|\"))",
+    "output": "or"
+  },
+  {
+    "pattern": "((bool_op) @root (#eq? @root \"&\"))",
+    "output": "and"
+  },
+  {
+    "pattern": "((bool_op) @root (#eq? @root \"-\"))",
+    "output": "but not"
+  },
+  {
+    "pattern": "(locus) @root",
+    "output": "the locus of the rule"
+  },
+  {
+    "pattern": "(context left: (pattern) @l (locus) @_ right: (pattern) @r) @root",
+    "output": "it is preceded by {l} and followed by {r}"
+  },
+  {
+    "pattern": "(context (locus) @_ right: (pattern) @r) @root",
+    "output": "it is followed by {r}"
+  },
+  {
+    "pattern": "(context left: (pattern) @l (locus) @_) @root",
+    "output": "it is preceded by {l}"
+  },
+  {
+    "pattern": "(context (locus) @_) @root",
+    "output": "anywhere"
+  }
+];
+
+RULES.CG = [
+  {
+    "pattern": "[(semicolon) (comment)] @root",
+    "output": ""
+  },
+  {
+    "pattern": "(source_file (_)* @thing_list) @root",
+    "output": [
+      {
+        "lists": {
+          "thing_list": {
+            "join": "\n"
+          }
+        },
+        "output": "{thing_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(inlineset (inlineset_single (setname) @name_text)) @root",
+    "output": "the set {name_text}"
+  },
+  {
+    "pattern": "(rule [\"(\" \")\"] @root)",
+    "output": ""
+  },
+  {
+    "pattern": "\n(\n  (rule\n    (ruletype) @type\n    (rule_target (_) @target)\n    [(contexttest)* @test_list \"(\" \")\"]*\n  ) @root\n  (#eq? @type \"SELECT\")\n)\n",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list}, keep only readings matching {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and "
+          }
+        }
+      },
+      {
+        "output": "Keep only readings matching {target}"
+      }
+    ]
+  },
+  {
+    "pattern": "\n(\n  (rule\n    (ruletype) @type\n    (rule_target (_) @target)\n    [(contexttest)* @test_list \"(\" \")\"]*\n  ) @root\n  (#eq? @type \"REMOVE\")\n)\n",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list}, remove any readings matching {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and "
+          }
+        }
+      },
+      {
+        "output": "If there are readings matching {target}, remove all others."
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_map_etc\n            (ruletype_map_etc) @type\n            (inlineset) @tags\n            (rule_target (_) @target)\n            [(contexttest)* @test_list \"(\" \")\"]*\n          ) @root\n          (#eq? @type \"MAP\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list}, add {tags} to each reading and prevent other rules from adding tags.",
+        "lists": {
+          "test_list": {
+            "join": " and "
+          }
+        }
+      },
+      {
+        "output": "Add {tags} to each reading and prevent other rules from adding tags."
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_substitute_etc\n            (ruletype_substitute_etc) @type\n            (inlineset) @src\n            (inlineset) @trg\n            (rule_target (_) @target)\n            [(contexttest)* @test_list \"(\" \")\"]*\n          ) @root\n          (#eq? @type \"SUBSTITUTE\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list}, replace {src} with {trg} in readings matching {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and "
+          }
+        }
+      },
+      {
+        "output": "Replace {src} with {trg} in readings matching {target}."
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_parentchild\n            type: (ruletype_parentchild) @type\n            trg: (rule_target (_) @target)\n            context: (contexttest)* @test_list\n            (contexttest) @ctxtarget\n            (contexttest)* @ctx_list\n          ) @root\n          (#eq? @type \"SETPARENT\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list}, set the parent of {target} to {ctxtarget}.",
+        "lists": {
+          "test_list": {
+            "join": " and "
+          }
+        }
+      },
+      {
+        "output": "Set the parent of {target} to {ctxtarget}."
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_with\n            trg: (rule_target (_) @target)\n            context: (contexttest)* @test_list\n            children: (_)* @rule_list\n          ) @root\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "Find a word matching {target} in context {test_list} and run the following rules:\n  ",
+        "lists": {
+          "test_list": {
+            "join": " and "
+          },
+          "rule_list": {
+            "join": "\n  "
+          }
+        }
+      },
+      {
+        "output": "Find a word matching {target} and run the following rules:\n  ",
+        "lists": {
+          "rule_list": {
+            "join": "\n  "
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "(section_header) @root",
+    "output": "Start a new section."
+  },
+  {
+    "pattern": "\n(\n  (tag (qtag) @tag_text) @root\n  (#match? @tag_text \"^\\\"<.*>\\\"$\")\n)",
+    "output": "word form {tag_text}"
+  },
+  {
+    "pattern": "(tag (qtag) @tag_text) @root",
+    "output": "lemma {tag_text}"
+  },
+  {
+    "pattern": "(tag (ntag) @tag_text) @root",
+    "output": "{tag_text}"
+  },
+  {
+    "pattern": "\n(\n  (set_special_list\n    (special_list_name) @name\n    (eq)\n    (taglist (tag)* @delim_list)\n  ) @root\n  (#eq? @name \"DELIMITERS\")\n)",
+    "output": [
+      {
+        "lists": {
+          "delim_list": {
+            "join": " or "
+          }
+        },
+        "output": "Start a new sentence after reading {delim_list}."
+      }
+    ]
+  },
+  {
+    "pattern": "(taglist (tag)* @tag_list) @root",
+    "output": [
+      {
+        "lists": {
+          "tag_list": {
+            "join": ", "
+          }
+        },
+        "output": "tags {tag_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(inlineset_single (taglist) @tags) @root",
+    "output": "{tags}"
+  },
+  {
+    "pattern": "(compotag \"(\" (tag)* @tag_list \")\") @root",
+    "output": [
+      {
+        "lists": {
+          "tag_list": {
+            "join": " and "
+          }
+        },
+        "output": "({tag_list})"
+      }
+    ]
+  },
+  {
+    "pattern": "(list (setname) @name_text (taglist [(tag) (compotag)]* @tag_list)) @root",
+    "output": [
+      {
+        "lists": {
+          "tag_list": {
+            "join": " or "
+          }
+        },
+        "output": "Define the set {name_text} as matching {tag_list}."
+      }
+    ]
+  },
+  {
+    "pattern": "(contexttest (contextpos) @ctx_text (inlineset (_) @set) (LINK) (contexttest) @link) @root",
+    "output": "the word at position {ctx_text} matches {set} and, relative to that, {link}"
+  },
+  {
+    "pattern": "(contexttest (contextpos) @ctx_text (inlineset (_) @set) !link) @root",
+    "output": "the word at position {ctx_text} matches {set}"
+  },
+  {
+    "pattern": "\n(\n  (inlineset_single (setname) @name_text) @root\n  (#match? @name_text \"^[$][$].*$\")\n)",
+    "output": "a tag from the set {name_text}, which must be the same as other instances of {name_text} in this rule"
+  },
+  {
+    "pattern": "(inlineset (inlineset_single) @a (set_op) @op_text (inlineset_single) @b) @root",
+    "output": "{a} {op_text} {b}"
+  }
+];
+
+HIGHLIGHT["rtx".toUpperCase()] = `[
+[
+  (arrow)
+  (str_op)
+  (and) (or)
+  (not)
+  "="
+  (blank)
+] @keyword.operator
+
+[
+  (if_tok)
+  (elif_tok)
+  (else_tok)
+  (always_tok)
+] @keyword.control
+
+(comment) @comment
+
+(weight) @constant.numeric
+(reduce_rule ":" @constant.numeric)
+(num) @constant.numeric
+
+(colon) @punctuation.delimiter
+
+(string) @constant.string
+
+(output_rule
+ pos: (ident) @variable)
+(retag_rule
+ src_attr: (ident) @variable
+ trg_attr: (ident) @variable)
+(attr_default
+ src: (ident) @variable
+ trg: (ident) @variable) ; (ND "") highlight trg as string
+(attr_rule
+ name: (ident) @variable)
+]`;
+
+HIGHLIGHT["twolc".toUpperCase()] = `[
+(comment) @comment
+
+[
+ (arrow) (regex_arrow)
+ (eq)
+ (prefix_op) (suffix_op)
+ (ignore_op) (bool_op) (replace_op) (compose_op)
+] @operator
+
+[
+ (word_boundary)
+ (any)
+] @constant.builtin
+((symbol) @constant.builtin
+
+[
+ (colon)
+ (semicolon)
+] @punctuation.delimiter
+
+[
+ (lpar) (rpar)
+ (loptional) (roptional)
+] @punctuation.bracket
+
+(regex_target "<[" @punctuation.bracket)
+(regex_target "]>" @punctuation.bracket)
+
+[
+ (alphabet_header) (diacritics_header) (rule_variables_header)
+ (sets_header) (definitions_header) (rules_header)
+] @keyword
+
+(rule target: (symbol) @variable.parameter)
+(rule target: (symbol_pair) @variable.parameter)
+(locus) @variable.parameter
+
+(rule_name) @string.quoted
+
+[
+ (except)
+ (variable_keyword)
+ (where)
+ (in_keyword)
+] @keyword
+
+(variables name: (symbol) @variable.parameter)
+
+(definition name: (symbol) @function)
+(set name: (symbol) @function)
+]`;
+
+HIGHLIGHT["cg".toUpperCase()] = `[
+[
+  (section_header)
+  (END)
+  (LIST)
+  (SET)
+  (INCLUDE)
+  (TEMPLATE)
+] @keyword.control
+
+[
+  (ruletype)
+  (ruletype_substitute_etc)
+  (ruletype_parentchild)
+  (ruletype_relation)
+  (ruletype_relations)
+  (ruletype_map_etc)
+  (ruletype_addcohort)
+  (ruletype_mergecohorts)
+  (ruletype_move)
+  (ruletype_switch)
+  (ruletype_external)
+] @keyword.control
+
+[
+  (IF)
+  (TARGET)
+  (TO)
+  (FROM)
+  (WITHCHILD)
+  (NOCHILD)
+  (BEFORE)
+  (AFTER)
+  (WITH)
+  (ONCE)
+  (ALWAYS)
+  (context_modifier)
+  (BARRIER)
+  (LINK)
+  (OR)
+  (set_op)
+  (ruleflag_name)
+] @keyword.operator
+
+(eq) @operator
+
+(semicolon) @punctuation.delimiter
+
+(comment) @comment
+
+(qtag) @string.quoted
+
+(contextpos) @constant.number
+
+(inlineset_single ["(" ")"] @punctuation.bracket)
+(compotag ["(" ")"] @punctuation.bracket)
+
+(taglist) @constant.other.symbol
+
+
+(list (setname) @variable)
+(set (setname) @variable)
+
+[
+  (special_list_name)
+  (STATIC_SETS)
+  (MAPPING_PREFIX)
+  (SUBREADINGS)
+  (PARENTHESES)
+] @keyword.other.special-method
+]`;
+

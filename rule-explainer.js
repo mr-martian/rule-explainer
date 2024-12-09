@@ -1,37 +1,17 @@
 const TSParser = window.TreeSitter;
-var langs = {
-  CG: null,
-  LEXC: null,
-  LEXD: null,
-  RTX: null,
-  TWOLC: null,
-  XFST: null,
-};
 
-var rules = {
-  CG: null,
-  LEXC: null,
-  LEXD: null,
-  RTX: null,
-  TWOLC: null,
-  XFST: null,
-};
+var LANGS = {};
 
 var Parser = null;
 
 TSParser.init().then(async function () {
   let tpl = TSParser.Language;
-  langs.CG = await tpl.load('wasm/tree-sitter-cg.wasm');
-  langs.LEXC = await tpl.load('wasm/tree-sitter-lexc.wasm');
-  langs.LEXD = await tpl.load('wasm/tree-sitter-lexd.wasm');
-  langs.RTX = await tpl.load('wasm/tree-sitter-rtx.wasm');
-  langs.TWOLC = await tpl.load('wasm/tree-sitter-twolc.wasm');
-  langs.XFST = await tpl.load('wasm/tree-sitter-xfst.wasm');
+  for (const ls of WASM) {
+    LANGS[ls[0]] = await tpl.load(ls[1]);
+    RULES[ls[0]] = load_patterns(LANGS[ls[0]], RULES[ls[0]]);
+  }
   Parser = new TSParser();
   console.log("Languages loaded");
-  rules.RTX = load_patterns(langs.RTX, RTX_RULES);
-  rules.TWOLC = load_patterns(langs.TWOLC, TWOLC_RULES);
-  console.log("Rules loaded");
   $('#update').click();
 });
 
@@ -142,17 +122,12 @@ function make_tree(node) {
 }
 
 function get_highlights(tree, lang) {
-  let caps = [];
-  if (lang == 'RTX') {
-    caps = langs.RTX.query(rtx_highlight).captures(tree.rootNode);
-  } else if (lang == 'TWOLC') {
-    caps = langs.TWOLC.query(twolc_highlight).captures(tree.rootNode);
-  }
+  let caps = LANGS[lang].query(HIGHLIGHT[lang]).captures(tree.rootNode);
   let ret = {};
   for (let obj of caps) {
     ret[obj.node.id] = obj.name.replace('.', '-');
   }
-  for (let obj of langs[lang].query('(ERROR) @x').captures(tree.rootNode)) {
+  for (let obj of LANGS[lang].query('(ERROR) @x').captures(tree.rootNode)) {
     ret[obj.node.id] = 'error';
   }
   return ret;
@@ -162,7 +137,7 @@ function gloss_tags(lang, tree) {
   if (lang == 'RTX') {
     let tag = {};
     let skip = [];
-    for (let obj of langs.RTX.query(RTX_TAG_QUERY).captures(tree.rootNode)) {
+    for (let obj of LANGS.RTX.query(RTX_TAG_QUERY).captures(tree.rootNode)) {
       if (obj.name == 'tag') {
         tag[obj.node.id] = obj.node.text;
       } else {
@@ -196,17 +171,16 @@ function update_output() {
     text = text.replace(/\n\n\n?/g, '\n');
   }
   text = text.trimEnd();
-  console.log(lang);
-  Parser.setLanguage(langs[lang]);
+  Parser.setLanguage(LANGS[lang]);
   let lines = text.split('\n');
   let tree = Parser.parse(text);
   let highlights = get_highlights(tree, lang);
   $('#code').html(make_spans(lines, tree, highlights));
-  if (lang == 'RTX') {
-    $('#tree').html(translate(rules.RTX, tree, true));
-    gloss_tags(lang, tree);
-  } else if (lang == 'TWOLC') {
-    $('#tree').html(translate(rules.TWOLC, tree, true));
+  if (RULES.hasOwnProperty(lang)) {
+    $('#tree').html(translate(RULES[lang], tree, true));
+    if (lang == 'RTX') {
+      gloss_tags(lang, tree);
+    }
   } else {
     $('#tree').html(make_tree(tree.rootNode));
   }
