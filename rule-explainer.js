@@ -12,7 +12,7 @@ TSParser.init().then(async function () {
   }
   Parser = new TSParser();
   console.log("Languages loaded");
-  $('#update').click();
+  update_output();
 });
 
 function make_spans(lines, tree, highlights) {
@@ -163,19 +163,65 @@ function show_highlights() {
   }
 }
 
+function get_text_and_cursor() {
+  let selection = window.getSelection();
+  let loc = {line: 0, col: 0};
+  let lines = [];
+  let codeEl = document.getElementById('code');
+  for (let i = 0; i < codeEl.childNodes.length; i++) {
+    let ln = codeEl.childNodes[i];
+    lines.push(ln.textContent.replace('\n', ''));
+    if (ln.contains(selection.focusNode)) {
+      loc.line = i;
+      for (let j = 0; j < ln.childNodes.length; j++) {
+        if (ln.childNodes[j].contains(selection.focusNode)) {
+          loc.col += selection.focusOffset;
+          break;
+        } else {
+          loc.col += ln.childNodes[j].textContent.length;
+        }
+      }
+    }
+  }
+  return {lines: lines, loc: loc};
+}
+
+function set_cursor(loc) {
+  let line = document.getElementById('code').childNodes[loc.line];
+  if (!line) return;
+  let count = loc.col;
+  let selection = window.getSelection();
+  selection.removeAllRanges();
+  let range = document.createRange();
+  range.selectNode(line);
+  range.setStart(line, 0);
+  let end = false;
+  for (let i = 0; i < line.childNodes.length; i++) {
+    let ln = line.childNodes[i].textContent.length;
+    if (count <= ln) {
+      range.setEnd(line.childNodes[i].childNodes[0], count);
+      end = true;
+    } else {
+      count -= ln;
+    }
+  }
+  if (!end) {
+    range.setEnd(line, 0);
+  }
+  range.collapse(false);
+  selection.addRange(range);
+}
+
 function update_output() {
   if (Parser == null) return;
+  let codeEl = document.getElementById('code');
   let lang = $('#parser').val();
-  let text = document.getElementById('code').innerText;
-  if (!text.match(/[^\n]\n[^\n]/)) {
-    text = text.replace(/\n\n\n?/g, '\n');
-  }
-  text = text.trimEnd();
+  let data = get_text_and_cursor();
   Parser.setLanguage(LANGS[lang]);
-  let lines = text.split('\n');
-  let tree = Parser.parse(text);
+  let tree = Parser.parse(data.lines.join('\n'));
   let highlights = get_highlights(tree, lang);
-  $('#code').html(make_spans(lines, tree, highlights));
+  $('#code').html(make_spans(data.lines, tree, highlights));
+  set_cursor(data.loc);
   if (RULES.hasOwnProperty(lang)) {
     $('#tree').html(translate(RULES[lang], tree, true));
     if (lang == 'RTX') {
@@ -200,6 +246,9 @@ function update_output() {
 }
 
 $(function() {
-  $('#update').click(update_output);
-  $('#update').click();
+  var tid = 0;
+  $('#code').on('input', function() {
+    clearTimeout(tid);
+    tid = setTimeout(update_output, 250);
+  });
 });
