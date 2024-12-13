@@ -108,6 +108,7 @@ function make_spans(lines, tree, highlights) {
       new_segs = new_segs.concat(segs.slice(j+1));
       segs = new_segs;
     }
+    segs.forEach((s) => { s[1] = escape_html(s[1]); });
     if (segs.length == 1 && segs[0][1].length == 0) {
       segs[0][1] = '<br/>';
     }
