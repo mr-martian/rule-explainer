@@ -2162,7 +2162,8 @@ RULES.CG = [
       {
         "lists": {
           "thing_list": {
-            "join": "\n"
+            "join": "\n",
+            "html_type": "p"
           }
         },
         "output": "{thing_list}"
@@ -2170,162 +2171,12 @@ RULES.CG = [
     ]
   },
   {
-    "pattern": "(inlineset (inlineset_single (setname) @name_text)) @root",
-    "output": "the set {name_text}"
-  },
-  {
     "pattern": "(rule [\"(\" \")\"] @root)",
     "output": ""
   },
   {
-    "pattern": "\n(\n  (rule\n    (ruletype) @type\n    (rule_target (_) @target)\n    [(contexttest)* @test_list \"(\" \")\"]*\n  ) @root\n  (#eq? @type \"SELECT\")\n)\n",
-    "output": [
-      {
-        "cond": [
-          {
-            "has": "test_list"
-          }
-        ],
-        "output": "If {test_list}, keep only readings matching {target}.",
-        "lists": {
-          "test_list": {
-            "join": " and "
-          }
-        }
-      },
-      {
-        "output": "Keep only readings matching {target}"
-      }
-    ]
-  },
-  {
-    "pattern": "\n(\n  (rule\n    (ruletype) @type\n    (rule_target (_) @target)\n    [(contexttest)* @test_list \"(\" \")\"]*\n  ) @root\n  (#eq? @type \"REMOVE\")\n)\n",
-    "output": [
-      {
-        "cond": [
-          {
-            "has": "test_list"
-          }
-        ],
-        "output": "If {test_list}, remove any readings matching {target}.",
-        "lists": {
-          "test_list": {
-            "join": " and "
-          }
-        }
-      },
-      {
-        "output": "If there are readings matching {target}, remove all others."
-      }
-    ]
-  },
-  {
-    "pattern": "\n        (\n          (rule_map_etc\n            (ruletype_map_etc) @type\n            (inlineset) @tags\n            (rule_target (_) @target)\n            [(contexttest)* @test_list \"(\" \")\"]*\n          ) @root\n          (#eq? @type \"MAP\")\n        )\n        ",
-    "output": [
-      {
-        "cond": [
-          {
-            "has": "test_list"
-          }
-        ],
-        "output": "If {test_list}, add {tags} to each reading and prevent other rules from adding tags.",
-        "lists": {
-          "test_list": {
-            "join": " and "
-          }
-        }
-      },
-      {
-        "output": "Add {tags} to each reading and prevent other rules from adding tags."
-      }
-    ]
-  },
-  {
-    "pattern": "\n        (\n          (rule_substitute_etc\n            (ruletype_substitute_etc) @type\n            (inlineset) @src\n            (inlineset) @trg\n            (rule_target (_) @target)\n            [(contexttest)* @test_list \"(\" \")\"]*\n          ) @root\n          (#eq? @type \"SUBSTITUTE\")\n        )\n        ",
-    "output": [
-      {
-        "cond": [
-          {
-            "has": "test_list"
-          }
-        ],
-        "output": "If {test_list}, replace {src} with {trg} in readings matching {target}.",
-        "lists": {
-          "test_list": {
-            "join": " and "
-          }
-        }
-      },
-      {
-        "output": "Replace {src} with {trg} in readings matching {target}."
-      }
-    ]
-  },
-  {
-    "pattern": "\n        (\n          (rule_parentchild\n            type: (ruletype_parentchild) @type\n            trg: (rule_target (_) @target)\n            context: (contexttest)* @test_list\n            (contexttest) @ctxtarget\n            (contexttest)* @ctx_list\n          ) @root\n          (#eq? @type \"SETPARENT\")\n        )\n        ",
-    "output": [
-      {
-        "cond": [
-          {
-            "has": "test_list"
-          }
-        ],
-        "output": "If {test_list}, set the parent of {target} to {ctxtarget}.",
-        "lists": {
-          "test_list": {
-            "join": " and "
-          }
-        }
-      },
-      {
-        "output": "Set the parent of {target} to {ctxtarget}."
-      }
-    ]
-  },
-  {
-    "pattern": "\n        (\n          (rule_with\n            trg: (rule_target (_) @target)\n            context: (contexttest)* @test_list\n            children: (_)* @rule_list\n          ) @root\n        )\n        ",
-    "output": [
-      {
-        "cond": [
-          {
-            "has": "test_list"
-          }
-        ],
-        "output": "Find a word matching {target} in context {test_list} and run the following rules:\n  ",
-        "lists": {
-          "test_list": {
-            "join": " and "
-          },
-          "rule_list": {
-            "join": "\n  "
-          }
-        }
-      },
-      {
-        "output": "Find a word matching {target} and run the following rules:\n  ",
-        "lists": {
-          "rule_list": {
-            "join": "\n  "
-          }
-        }
-      }
-    ]
-  },
-  {
     "pattern": "(section_header) @root",
     "output": "Start a new section."
-  },
-  {
-    "pattern": "\n(\n  (tag (qtag) @tag_text) @root\n  (#match? @tag_text \"^\\\"<.*>\\\"$\")\n)",
-    "output": "word form {tag_text}"
-  },
-  {
-    "pattern": "(tag (qtag) @tag_text) @root",
-    "output": "lemma {tag_text}"
-  },
-  {
-    "pattern": "(tag (ntag) @tag_text) @root",
-    "output": "{tag_text}"
   },
   {
     "pattern": "\n(\n  (set_special_list\n    (special_list_name) @name\n    (eq)\n    (taglist (tag)* @delim_list)\n  ) @root\n  (#eq? @name \"DELIMITERS\")\n)",
@@ -2337,36 +2188,6 @@ RULES.CG = [
           }
         },
         "output": "Start a new sentence after reading {delim_list}."
-      }
-    ]
-  },
-  {
-    "pattern": "(taglist (tag)* @tag_list) @root",
-    "output": [
-      {
-        "lists": {
-          "tag_list": {
-            "join": ", "
-          }
-        },
-        "output": "tags {tag_list}"
-      }
-    ]
-  },
-  {
-    "pattern": "(inlineset_single (taglist) @tags) @root",
-    "output": "{tags}"
-  },
-  {
-    "pattern": "(compotag \"(\" (tag)* @tag_list \")\") @root",
-    "output": [
-      {
-        "lists": {
-          "tag_list": {
-            "join": " and "
-          }
-        },
-        "output": "({tag_list})"
       }
     ]
   },
@@ -2384,20 +2205,2790 @@ RULES.CG = [
     ]
   },
   {
-    "pattern": "(contexttest (contextpos) @ctx_text (inlineset (_) @set) (LINK) (contexttest) @link) @root",
-    "output": "the word at position {ctx_text} matches {set} and, relative to that, {link}"
+    "pattern": "(set\n          name: (setname) @name_text\n          value: (inlineset) @value\n        ) @root",
+    "output": "Define the set {name_text} as any word {value}."
   },
   {
-    "pattern": "(contexttest (contextpos) @ctx_text (inlineset (_) @set) !link) @root",
-    "output": "the word at position {ctx_text} matches {set}"
+    "pattern": "\n(\n  (rule\n    (ruletype) @type\n    (rule_target (_) @target)\n    [(contexttest)* @test_list \"(\" \")\"]*\n  ) @root\n  (#eq? @type \"SELECT\")\n)\n",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then delete any reading unless it is one {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Delete any reading unless it is one {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n(\n  (rule\n    (ruletype) @type\n    (rule_target (_) @target)\n    [(contexttest)* @test_list \"(\" \")\"]*\n  ) @root\n  (#eq? @type \"REMOVE\")\n)\n",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then remove any reading {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Remove any reading {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n(\n  (rule\n    (ruletype) @type\n    (rule_target (_) @target)\n    [(contexttest)* @test_list \"(\" \")\"]*\n  ) @root\n  (#eq? @type \"UNMAP\")\n)\n",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then remove tags and restrictions added by MAP for a word {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Remove tags and restrictions added by MAP for a word {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule\n            (ruletype) @type\n            (rule_target (_) @target)\n            [(contexttest)* @test_list \"(\" \")\"]*\n          ) @root\n          (#eq? @type \"REMCOHORT\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then delete any word {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Delete any word {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_substitute_etc\n            (ruletype_substitute_etc) @type\n            (inlineset (inlineset_single [(taglist) (setname)] @src))\n            (inlineset (inlineset_single [(taglist) (setname)] @trg))\n            (rule_target (_) @target)\n            [(contexttest)* @test_list \"(\" \")\"]*\n          ) @root\n          (#eq? @type \"SUBSTITUTE\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then replace {src} with {trg} in any reading {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Replace {src} with {trg} in any reading {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_parentchild\n            type: (ruletype_parentchild) @type\n            trg: (rule_target (_) @target)\n            context: (contexttest)* @test_list\n            (contexttest) @ctxtarget\n            (contexttest)* @ctx_list\n          ) @root\n          (#eq? @type \"SETPARENT\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then set the parent of any word {target} to {ctxtarget}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Set the parent of any word {target} to {ctxtarget}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_parentchild\n            type: (ruletype_parentchild) @type\n            trg: (_) @target\n            context: (contexttest)* @test_list\n            (contexttest) @ctxtarget\n            (contexttest)* @ctx_list\n          ) @root\n          (#eq? @type \"SETCHILD\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then set a word {target} as the parent of a word {ctxtarget}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Set a word {target} as the parent of a word {ctxtarget}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_map_etc\n            type: (ruletype_map_etc) @type\n            tags: (inlineset (inlineset_single [(taglist) (setname)] @tags))\n            target: (rule_target (_) @target)\n            context: [(contexttest) @test_list \"(\" \")\"]*\n          ) @root\n          (#eq? @type \"MAP\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then add {tags} to a word {target} and prevent other rules from adding tags.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Add {tags} to a word {target} and prevent other rules from adding tags.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_map_etc\n            type: (ruletype_map_etc) @type\n            tags: (inlineset (inlineset_single [(taglist) (setname)] @tags))\n            target: (rule_target (_) @target)\n            context: (contexttest)* @test_list\n          ) @root\n          (#eq? @type \"ADD\")\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "If {test_list} then add {tags} to a word {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Add {tags} to a word {target}.",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ul"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (\n          (rule_with\n            trg: (rule_target (_) @target)\n            context: [(contexttest) @test_list \"(\" \")\"]*\n            children: (_)* @rule_list\n          ) @root\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "test_list"
+          }
+        ],
+        "output": "Find a word {target} in context {test_list} and run the following rules:\n  {rule_list}",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ol"
+          },
+          "rule_list": {
+            "join": "\n  ",
+            "html_type": "ol"
+          }
+        }
+      },
+      {
+        "cond": [],
+        "output": "Find a word {target} and run the following rules:\n  {rule_list}",
+        "lists": {
+          "test_list": {
+            "join": " and ",
+            "html_type": "ol"
+          },
+          "rule_list": {
+            "join": "\n  ",
+            "html_type": "ol"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "pattern": "\n        (contexttest\n          modifier: [\n            (context_modifier) @all\n            (context_modifier) @none\n            (context_modifier) @not\n            (context_modifier) @negate\n          ]*\n          (#eq? @all \"ALL\")\n          (#eq? @none \"NONE\")\n          (#eq? @not \"NOT\")\n          (#eq? @negate \"NEGATE\")\n          (contextpos) @ctx\n          set: (_) @set\n          barrier: (inlineset)? @barrier\n          link: (contexttest)? @link\n        ) @root\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that every no {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that every no some {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that every {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          }
+        ],
+        "output": "it is not the case that every some {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that no {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that no some {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          }
+        ],
+        "output": "it is not the case that some {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every no {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "every no {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every no some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every no some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "every no some {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "every {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          }
+        ],
+        "output": "every some {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "no {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          }
+        ],
+        "output": "no some {ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "{ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "{ctx} is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some {ctx} is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "not"
+          }
+        ],
+        "output": "some {ctx} is not one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some {ctx} is one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "some {ctx} is one {set}",
+        "lists": {}
+      }
+    ]
+  },
+  {
+    "pattern": "(contextpos . (ctx_parent) .) @root",
+    "output": "parent"
+  },
+  {
+    "pattern": "(contextpos . (ctx_sibling) .) @root",
+    "output": "sibling"
+  },
+  {
+    "pattern": "(contextpos . (ctx_child) .) @root",
+    "output": "child"
+  },
+  {
+    "pattern": "(contextpos) @root_text",
+    "output": "word at position {root_text}"
+  },
+  {
+    "pattern": "(inlineset [(inlineset_single) @child_list (set_op)]*) @root",
+    "output": [
+      {
+        "lists": {
+          "child_list": {
+            "join": " "
+          }
+        },
+        "output": "{child_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single (setname) @name) @root)",
+    "output": "which matches {name}"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single (taglist) @tags) @root)",
+    "output": "which has {tags}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#match? @op \"^([oO][rR]|[|])$\")\n        )\n        ",
+    "output": "or matches {name}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#match? @op \"^([oO][rR]|[|])$\")\n        )\n        ",
+    "output": "or has {tags}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#eq? @op \"+\")\n        )\n        ",
+    "output": "and matches {name}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#eq? @op \"+\")\n        )\n        ",
+    "output": "and has {tags}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#eq? @op \"-\")\n        )\n        ",
+    "output": "and does not match {name}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#eq? @op \"-\")\n        )\n        ",
+    "output": "and does not have {tags}"
+  },
+  {
+    "pattern": "\n        (rule_with (_ (rule_target\n          (inlineset . (inlineset_single (taglist . (tag) @t .)) .)\n          (#eq? @t \"*\")\n        ) @root))\n        ",
+    "output": "the target of the containing WITH rule"
+  },
+  {
+    "pattern": "(rule_target\n          (inlineset . (inlineset_single (setname) @name_text) .)\n        ) @root",
+    "output": "a reading matching the set {name_text}"
+  },
+  {
+    "pattern": "(rule_target\n          (inlineset) @desc\n        ) @root",
+    "output": "a reading matching {desc}"
+  },
+  {
+    "pattern": "(inlineset\n          (inlineset_single . (taglist (tag) @t (#eq? @t \"*\")) .)\n        ) @root",
+    "output": "any word"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C1_\")\n            ) .) @root\n            ",
+    "output": "context item 1 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C2_\")\n            ) .) @root\n            ",
+    "output": "context item 2 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C3_\")\n            ) .) @root\n            ",
+    "output": "context item 3 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C4_\")\n            ) .) @root\n            ",
+    "output": "context item 4 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C5_\")\n            ) .) @root\n            ",
+    "output": "context item 5 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C6_\")\n            ) .) @root\n            ",
+    "output": "context item 6 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C7_\")\n            ) .) @root\n            ",
+    "output": "context item 7 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C8_\")\n            ) .) @root\n            ",
+    "output": "context item 8 of the containing WITH rule"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C9_\")\n            ) .) @root\n            ",
+    "output": "context item 9 of the containing WITH rule"
+  },
+  {
+    "pattern": "\n(\n  (tag (qtag) @tag_text) @root\n  (#match? @tag_text \"^\\\"<.*>\\\"$\")\n)",
+    "output": "word form {tag_text}"
+  },
+  {
+    "pattern": "(tag (qtag) @tag_text) @root",
+    "output": "lemma {tag_text}"
+  },
+  {
+    "pattern": "(tag (ntag) @tag_text) @root",
+    "output": "{tag_text}"
+  },
+  {
+    "pattern": "(taglist . (tag) @tg .) @root",
+    "output": "the tag {tg}"
+  },
+  {
+    "pattern": "(inlineset\n          . (inlineset_single . (taglist (tag)+ @t_list) .) .) @root",
+    "output": [
+      {
+        "lists": {
+          "t_list": {
+            "join": ", "
+          }
+        },
+        "output": "the tags {t_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(compotag \"(\" (tag)* @tag_list \")\") @root",
+    "output": [
+      {
+        "lists": {
+          "tag_list": {
+            "join": " and "
+          }
+        },
+        "output": "({tag_list})"
+      }
+    ]
+  },
+  {
+    "pattern": "(taglist (tag)* @tag_list) @root",
+    "output": [
+      {
+        "lists": {
+          "tag_list": {
+            "join": ", "
+          }
+        },
+        "output": "tags {tag_list}"
+      }
+    ]
   },
   {
     "pattern": "\n(\n  (inlineset_single (setname) @name_text) @root\n  (#match? @name_text \"^[$][$].*$\")\n)",
-    "output": "a tag from the set {name_text}, which must be the same as other instances of {name_text} in this rule"
+    "output": "the set {name_text}, which must be the same as other instances of {name_text} in this rule"
   },
   {
-    "pattern": "(inlineset (inlineset_single) @a (set_op) @op_text (inlineset_single) @b) @root",
-    "output": "{a} {op_text} {b}"
+    "pattern": "(setname) @root_text",
+    "output": "the set {root_text}"
   }
 ];
 
