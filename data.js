@@ -2507,6 +2507,2314 @@ RULES.CG = [
     ]
   },
   {
+    "pattern": "\n        ([(TO) (FROM)] .\n        (contexttest\n          modifier: [\n            (context_modifier) @all\n            (context_modifier) @none\n            (context_modifier) @not\n            (context_modifier) @negate\n          ]*\n          (#eq? @all \"ALL\")\n          (#eq? @none \"NONE\")\n          (#eq? @not \"NOT\")\n          (#eq? @negate \"NEGATE\")\n          (contextpos) @ctx\n          set: (_) @set\n          barrier: (inlineset)? @barrier\n          link: (contexttest)? @link\n        ) @root\n        )\n        ",
+    "output": [
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that every reading no reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that every reading no reading some reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          }
+        ],
+        "output": "it is not the case that every reading some reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that no reading some reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "it is not the case that {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          }
+        ],
+        "output": "it is not the case that some reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading no reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "every reading no reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "every reading no reading some reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "every reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "every reading some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          }
+        ],
+        "output": "every reading some reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "no reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no reading some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "no reading some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          }
+        ],
+        "output": "no reading some reading {ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "{ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "{ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "{ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          }
+        ],
+        "output": "{ctx} which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "barrier"
+          }
+        ],
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) which must be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "not"
+          },
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some reading {ctx} which must not be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "not"
+          }
+        ],
+        "output": "some reading {ctx} which must not be one {set}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "link"
+          }
+        ],
+        "output": "some reading {ctx} which must be one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "some reading {ctx} which must be one {set}",
+        "lists": {}
+      }
+    ]
+  },
+  {
     "pattern": "\n        (contexttest\n          modifier: [\n            (context_modifier) @all\n            (context_modifier) @none\n            (context_modifier) @not\n            (context_modifier) @negate\n          ]*\n          (#eq? @all \"ALL\")\n          (#eq? @none \"NONE\")\n          (#eq? @not \"NOT\")\n          (#eq? @negate \"NEGATE\")\n          (contextpos) @ctx\n          set: (_) @set\n          barrier: (inlineset)? @barrier\n          link: (contexttest)? @link\n        ) @root\n        ",
     "output": [
       {
@@ -2536,7 +4844,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2563,7 +4871,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -2590,7 +4898,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2614,7 +4922,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "it is not the case that every no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "it is not the case that every reading no reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -2641,7 +4949,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no {ctx} is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2665,7 +4973,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that every no {ctx} is not one {set}",
+        "output": "it is not the case that every reading no reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -2689,7 +4997,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no {ctx} is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2710,7 +5018,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "it is not the case that every no {ctx} is one {set}",
+        "output": "it is not the case that every reading no reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -2734,7 +5042,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2755,7 +5063,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -2776,7 +5084,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2794,7 +5102,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "it is not the case that every no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "it is not the case that every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -2815,7 +5123,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2833,7 +5141,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that every no some {ctx} is not one {set}",
+        "output": "it is not the case that every reading no reading some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -2851,7 +5159,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every no some {ctx} is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2866,34 +5174,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "it is not the case that every no some {ctx} is one {set}",
-        "lists": {}
-      },
-      {
-        "cond": [
-          {
-            "has": "negate"
-          },
-          {
-            "has": "all"
-          },
-          {
-            "has": "all"
-          },
-          {
-            "has": "none"
-          },
-          {
-            "has": "barrier"
-          },
-          {
-            "has": "not"
-          },
-          {
-            "has": "link"
-          }
-        ],
-        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading no reading some reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -2915,9 +5196,36 @@ RULES.CG = [
           },
           {
             "has": "not"
+          },
+          {
+            "has": "link"
           }
         ],
-        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -2941,7 +5249,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -2962,7 +5270,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "it is not the case that every {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "it is not the case that every reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -2986,7 +5294,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every {ctx} is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3007,7 +5315,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that every {ctx} is not one {set}",
+        "output": "it is not the case that every reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -3028,7 +5336,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every {ctx} is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3046,7 +5354,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "it is not the case that every {ctx} is one {set}",
+        "output": "it is not the case that every reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -3067,7 +5375,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3085,7 +5393,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -3103,7 +5411,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3118,7 +5426,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "it is not the case that every some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "it is not the case that every reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -3136,7 +5444,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3151,7 +5459,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that every some {ctx} is not one {set}",
+        "output": "it is not the case that every reading some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -3166,7 +5474,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that every some {ctx} is one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3178,34 +5486,7 @@ RULES.CG = [
             "has": "all"
           }
         ],
-        "output": "it is not the case that every some {ctx} is one {set}",
-        "lists": {}
-      },
-      {
-        "cond": [
-          {
-            "has": "negate"
-          },
-          {
-            "has": "none"
-          },
-          {
-            "has": "all"
-          },
-          {
-            "has": "none"
-          },
-          {
-            "has": "barrier"
-          },
-          {
-            "has": "not"
-          },
-          {
-            "has": "link"
-          }
-        ],
-        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that every reading some reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -3227,9 +5508,36 @@ RULES.CG = [
           },
           {
             "has": "not"
+          },
+          {
+            "has": "link"
           }
         ],
-        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "negate"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -3253,7 +5561,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3274,7 +5582,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "it is not the case that no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "it is not the case that no reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -3298,7 +5606,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that no {ctx} is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that no reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3319,7 +5627,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that no {ctx} is not one {set}",
+        "output": "it is not the case that no reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -3340,7 +5648,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that no {ctx} is one {set} and, relative to that, {link}",
+        "output": "it is not the case that no reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3358,7 +5666,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "it is not the case that no {ctx} is one {set}",
+        "output": "it is not the case that no reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -3379,7 +5687,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3397,7 +5705,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -3415,7 +5723,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3430,7 +5738,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "it is not the case that no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "it is not the case that no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -3448,7 +5756,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that no some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that no reading some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3463,7 +5771,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that no some {ctx} is not one {set}",
+        "output": "it is not the case that no reading some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -3478,7 +5786,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that no some {ctx} is one {set} and, relative to that, {link}",
+        "output": "it is not the case that no reading some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3490,7 +5798,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "it is not the case that no some {ctx} is one {set}",
+        "output": "it is not the case that no reading some reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -3664,7 +5972,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3679,7 +5987,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -3694,7 +6002,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3706,7 +6014,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "it is not the case that some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "it is not the case that some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -3721,7 +6029,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "it is not the case that some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3733,7 +6041,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "it is not the case that some {ctx} is not one {set}",
+        "output": "it is not the case that some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -3745,7 +6053,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "it is not the case that some {ctx} is one {set} and, relative to that, {link}",
+        "output": "it is not the case that some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3754,7 +6062,7 @@ RULES.CG = [
             "has": "negate"
           }
         ],
-        "output": "it is not the case that some {ctx} is one {set}",
+        "output": "it is not the case that some reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -3781,7 +6089,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3805,7 +6113,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "every no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -3829,7 +6137,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3850,7 +6158,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "every no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "every reading no reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -3874,7 +6182,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no {ctx} is not one {set} and, relative to that, {link}",
+        "output": "every reading no reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3895,7 +6203,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "every no {ctx} is not one {set}",
+        "output": "every reading no reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -3916,7 +6224,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no {ctx} is one {set} and, relative to that, {link}",
+        "output": "every reading no reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3934,7 +6242,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "every no {ctx} is one {set}",
+        "output": "every reading no reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -3955,7 +6263,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -3973,7 +6281,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -3991,7 +6299,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4006,7 +6314,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "every no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "every reading no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -4024,7 +6332,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "every reading no reading some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4039,7 +6347,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "every no some {ctx} is not one {set}",
+        "output": "every reading no reading some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -4054,7 +6362,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every no some {ctx} is one {set} and, relative to that, {link}",
+        "output": "every reading no reading some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4066,31 +6374,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "every no some {ctx} is one {set}",
-        "lists": {}
-      },
-      {
-        "cond": [
-          {
-            "has": "all"
-          },
-          {
-            "has": "all"
-          },
-          {
-            "has": "none"
-          },
-          {
-            "has": "barrier"
-          },
-          {
-            "has": "not"
-          },
-          {
-            "has": "link"
-          }
-        ],
-        "output": "every {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "every reading no reading some reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -4109,9 +6393,33 @@ RULES.CG = [
           },
           {
             "has": "not"
+          },
+          {
+            "has": "link"
           }
         ],
-        "output": "every {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "all"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -4132,7 +6440,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4150,7 +6458,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "every {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "every reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -4171,7 +6479,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every {ctx} is not one {set} and, relative to that, {link}",
+        "output": "every reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4189,7 +6497,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "every {ctx} is not one {set}",
+        "output": "every reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -4207,7 +6515,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every {ctx} is one {set} and, relative to that, {link}",
+        "output": "every reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4222,7 +6530,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "every {ctx} is one {set}",
+        "output": "every reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -4240,7 +6548,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4255,7 +6563,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "every some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -4270,7 +6578,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4282,7 +6590,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "every some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "every reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -4297,7 +6605,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "every reading some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4309,7 +6617,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "every some {ctx} is not one {set}",
+        "output": "every reading some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -4321,7 +6629,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "every some {ctx} is one {set} and, relative to that, {link}",
+        "output": "every reading some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4330,31 +6638,7 @@ RULES.CG = [
             "has": "all"
           }
         ],
-        "output": "every some {ctx} is one {set}",
-        "lists": {}
-      },
-      {
-        "cond": [
-          {
-            "has": "none"
-          },
-          {
-            "has": "all"
-          },
-          {
-            "has": "none"
-          },
-          {
-            "has": "barrier"
-          },
-          {
-            "has": "not"
-          },
-          {
-            "has": "link"
-          }
-        ],
-        "output": "no {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "every reading some reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -4373,9 +6657,33 @@ RULES.CG = [
           },
           {
             "has": "not"
+          },
+          {
+            "has": "link"
           }
         ],
-        "output": "no {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "none"
+          },
+          {
+            "has": "all"
+          },
+          {
+            "has": "none"
+          },
+          {
+            "has": "barrier"
+          },
+          {
+            "has": "not"
+          }
+        ],
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -4396,7 +6704,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "no {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4414,7 +6722,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "no {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "no reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -4435,7 +6743,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "no {ctx} is not one {set} and, relative to that, {link}",
+        "output": "no reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4453,7 +6761,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "no {ctx} is not one {set}",
+        "output": "no reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -4471,7 +6779,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "no {ctx} is one {set} and, relative to that, {link}",
+        "output": "no reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4486,7 +6794,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "no {ctx} is one {set}",
+        "output": "no reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -4504,7 +6812,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "no some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4519,7 +6827,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "no some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -4534,7 +6842,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "no some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4546,7 +6854,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "no some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "no reading some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -4561,7 +6869,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "no some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "no reading some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4573,7 +6881,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "no some {ctx} is not one {set}",
+        "output": "no reading some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -4585,7 +6893,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "no some {ctx} is one {set} and, relative to that, {link}",
+        "output": "no reading some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4594,7 +6902,7 @@ RULES.CG = [
             "has": "none"
           }
         ],
-        "output": "no some {ctx} is one {set}",
+        "output": "no reading some reading {ctx} is one {set}",
         "lists": {}
       },
       {
@@ -4741,7 +7049,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "some {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4753,7 +7061,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "some {ctx} (stop looking if you reach one {barrier}) is not one {set}",
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) is not one {set}",
         "lists": {}
       },
       {
@@ -4765,7 +7073,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "some {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4774,7 +7082,7 @@ RULES.CG = [
             "has": "barrier"
           }
         ],
-        "output": "some {ctx} (stop looking if you reach one {barrier}) is one {set}",
+        "output": "some reading {ctx} (stop looking if you reach one {barrier}) is one {set}",
         "lists": {}
       },
       {
@@ -4786,7 +7094,7 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "some {ctx} is not one {set} and, relative to that, {link}",
+        "output": "some reading {ctx} is not one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
@@ -4795,7 +7103,7 @@ RULES.CG = [
             "has": "not"
           }
         ],
-        "output": "some {ctx} is not one {set}",
+        "output": "some reading {ctx} is not one {set}",
         "lists": {}
       },
       {
@@ -4804,80 +7112,176 @@ RULES.CG = [
             "has": "link"
           }
         ],
-        "output": "some {ctx} is one {set} and, relative to that, {link}",
+        "output": "some reading {ctx} is one {set} and, relative to that, {link}",
         "lists": {}
       },
       {
         "cond": [],
-        "output": "some {ctx} is one {set}",
+        "output": "some reading {ctx} is one {set}",
         "lists": {}
       }
     ]
   },
   {
-    "pattern": "(contextpos . (ctx_parent) .) @root",
-    "output": "parent"
+    "pattern": "(ctx_parent) @root",
+    "output": "in the parent cohort"
   },
   {
-    "pattern": "(contextpos . (ctx_sibling) .) @root",
-    "output": "sibling"
+    "pattern": "(ctx_sibling) @root",
+    "output": "in a sibling cohort"
   },
   {
-    "pattern": "(contextpos . (ctx_child) .) @root",
-    "output": "child"
+    "pattern": "(ctx_child) @root",
+    "output": "in a child cohort"
   },
   {
-    "pattern": "(contextpos) @root_text",
-    "output": "word at position {root_text}"
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC1\"))",
+    "output": "in the cohort found by context test 1 in the containing WITH rule"
   },
   {
-    "pattern": "(inlineset [(inlineset_single) @child_list (set_op)]*) @root",
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC2\"))",
+    "output": "in the cohort found by context test 2 in the containing WITH rule"
+  },
+  {
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC3\"))",
+    "output": "in the cohort found by context test 3 in the containing WITH rule"
+  },
+  {
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC4\"))",
+    "output": "in the cohort found by context test 4 in the containing WITH rule"
+  },
+  {
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC5\"))",
+    "output": "in the cohort found by context test 5 in the containing WITH rule"
+  },
+  {
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC6\"))",
+    "output": "in the cohort found by context test 6 in the containing WITH rule"
+  },
+  {
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC7\"))",
+    "output": "in the cohort found by context test 7 in the containing WITH rule"
+  },
+  {
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC8\"))",
+    "output": "in the cohort found by context test 8 in the containing WITH rule"
+  },
+  {
+    "pattern": "((ctx_jump_context) @root (#eq? @root \"jC9\"))",
+    "output": "in the cohort found by context test 9 in the containing WITH rule"
+  },
+  {
+    "pattern": "\n        (contextpos\n          [(ctx_negative) @neg (ctx_scan_first) @star]*\n          (ctx_number) @root_text\n          [(ctx_negative) @neg (ctx_scan_first) @star]*\n        )\n        ",
     "output": [
       {
-        "lists": {
-          "child_list": {
-            "join": " "
+        "cond": [
+          {
+            "has": "neg"
+          },
+          {
+            "has": "neg"
+          },
+          {
+            "has": "star"
           }
-        },
-        "output": "{child_list}"
+        ],
+        "output": "in the cohort {root_text} positions to the left or further in that direction",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "neg"
+          },
+          {
+            "has": "neg"
+          }
+        ],
+        "output": "in the cohort {root_text} positions to the left",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "neg"
+          },
+          {
+            "has": "star"
+          }
+        ],
+        "output": "in the cohort {root_text} positions to the leftright or further in that direction",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "neg"
+          }
+        ],
+        "output": "in the cohort {root_text} positions to the leftright",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "neg"
+          },
+          {
+            "has": "star"
+          }
+        ],
+        "output": "in the cohort {root_text} positions to the  or further in that direction",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "neg"
+          }
+        ],
+        "output": "in the cohort {root_text} positions to the ",
+        "lists": {}
+      },
+      {
+        "cond": [
+          {
+            "has": "star"
+          }
+        ],
+        "output": "in the cohort {root_text} positions to the right or further in that direction",
+        "lists": {}
+      },
+      {
+        "cond": [],
+        "output": "in the cohort {root_text} positions to the right",
+        "lists": {}
       }
     ]
   },
   {
-    "pattern": "(inlineset . (inlineset_single (setname) @name) @root)",
-    "output": "which matches {name}"
+    "pattern": "((ctx_number) [(ctx_negative) (ctx_scan_first)] @root)",
+    "output": ""
   },
   {
-    "pattern": "(inlineset . (inlineset_single (taglist) @tags) @root)",
-    "output": "which has {tags}"
+    "pattern": "([(ctx_negative) (ctx_scan_first)] @root (ctx_number))",
+    "output": ""
   },
   {
-    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#match? @op \"^([oO][rR]|[|])$\")\n        )\n        ",
-    "output": "or matches {name}"
-  },
-  {
-    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#match? @op \"^([oO][rR]|[|])$\")\n        )\n        ",
-    "output": "or has {tags}"
-  },
-  {
-    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#eq? @op \"+\")\n        )\n        ",
-    "output": "and matches {name}"
-  },
-  {
-    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#eq? @op \"+\")\n        )\n        ",
-    "output": "and has {tags}"
-  },
-  {
-    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#eq? @op \"-\")\n        )\n        ",
-    "output": "and does not match {name}"
-  },
-  {
-    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#eq? @op \"-\")\n        )\n        ",
-    "output": "and does not have {tags}"
+    "pattern": "(contextpos (_)* @stuff_list) @root",
+    "output": [
+      {
+        "output": "{stuff_list}",
+        "lists": {
+          "stuff_list": {
+            "join": " "
+          }
+        }
+      }
+    ]
   },
   {
     "pattern": "\n        (rule_with (_ (rule_target\n          (inlineset . (inlineset_single (taglist . (tag) @t .)) .)\n          (#eq? @t \"*\")\n        ) @root))\n        ",
-    "output": "the target of the containing WITH rule"
+    "output": "which is the target of the containing WITH rule"
   },
   {
     "pattern": "(rule_target\n          (inlineset . (inlineset_single (setname) @name_text) .)\n        ) @root",
@@ -4889,7 +7293,7 @@ RULES.CG = [
   },
   {
     "pattern": "(inlineset\n          (inlineset_single . (taglist (tag) @t (#eq? @t \"*\")) .)\n        ) @root",
-    "output": "any word"
+    "output": "which can be any word"
   },
   {
     "pattern": "(inlineset . (inlineset_single\n              (setname) @name\n              (#eq? @name \"_C1_\")\n            ) .) @root\n            ",
@@ -4989,6 +7393,51 @@ RULES.CG = [
   {
     "pattern": "(setname) @root_text",
     "output": "the set {root_text}"
+  },
+  {
+    "pattern": "(inlineset [(inlineset_single) @child_list (set_op)]*) @root",
+    "output": [
+      {
+        "lists": {
+          "child_list": {
+            "join": " "
+          }
+        },
+        "output": "{child_list}"
+      }
+    ]
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single (setname) @name) @root)",
+    "output": "which matches {name}"
+  },
+  {
+    "pattern": "(inlineset . (inlineset_single (taglist) @tags) @root)",
+    "output": "which has {tags}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#match? @op \"^([oO][rR]|[|])$\")\n        )\n        ",
+    "output": "or matches {name}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#match? @op \"^([oO][rR]|[|])$\")\n        )\n        ",
+    "output": "or has {tags}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#eq? @op \"+\")\n        )\n        ",
+    "output": "and matches {name}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#eq? @op \"+\")\n        )\n        ",
+    "output": "and has {tags}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (setname) @name) @root\n          (#eq? @op \"-\")\n        )\n        ",
+    "output": "and does not match {name}"
+  },
+  {
+    "pattern": "\n        (inlineset\n          (set_op) @op\n          .\n          (inlineset_single (taglist) @tags) @root\n          (#eq? @op \"-\")\n        )\n        ",
+    "output": "and does not have {tags}"
   }
 ];
 
