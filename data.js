@@ -7280,7 +7280,7 @@ RULES.CG = [
     ]
   },
   {
-    "pattern": "\n        (rule_with (_ (rule_target\n          (inlineset . (inlineset_single (taglist . (tag) @t .)) .)\n          (#eq? @t \"*\")\n        ) @root))\n        ",
+    "pattern": "\n        (rule_with (_ (rule_target\n          (inlineset . (inlineset_single (taglist . (tag) @t .)) .)\n          @root\n          (#eq? @t \"*\")\n        )))\n        ",
     "output": "which is the target of the containing WITH rule"
   },
   {
